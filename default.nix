@@ -2,7 +2,7 @@ with import <nixpkgs> { };
 
 python36.pkgs.buildPythonPackage rec {
   pname = "teamspeak-update-notifier";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = ./.;
 
