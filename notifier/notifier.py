@@ -1,26 +1,24 @@
-#!/usr/bin/env python
-
 from configparser import ConfigParser
+import argparse
 import signal
 import sys
 
-from notifier.socket import Socket
-from notifier.server_query import ServerQuery
-from notifier.version_manager import VersionManager
-from notifier.logger import log_error, log_info
+from .socket import Socket
+from .server_query import ServerQuery
+from .version_manager import VersionManager
+from .logger import log_error, log_info
 
 
-def sigterm_handler(_signo, _stack_frame):
-    # Raises SystemExit(0):
-    sys.exit(0)
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("config", help="Path to config file.")
+    args = parser.parse_args()
 
-signal.signal(signal.SIGTERM, sigterm_handler)
-
-
-if __name__ == "__main__":
     conf = ConfigParser()
-    conf.read("config.ini")
+    conf.read(args.config)
     log_info("loaded config")
+
+    signal.signal(signal.SIGTERM, sigterm_handler)
 
     try:
         custom_socket = Socket()
@@ -53,3 +51,8 @@ if __name__ == "__main__":
         )
     finally:
         server_query.close()
+
+
+def sigterm_handler(_signo, _stack_frame):
+    # Raises SystemExit(0):
+    sys.exit(0)

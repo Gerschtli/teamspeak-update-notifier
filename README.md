@@ -18,10 +18,11 @@ Pretty neat!
 
 You need `python3` with `beautifulsoup4` and `requests` packages installed.
 
-Copy `config.ini.dist` to `config.ini` and update the settings to your liking. The options are described in comments in
-the sample config.
+Setup a config file like `config.ini.dist`. The options are described in comments in the sample config.
 
 If the config is set up, simply run the following:
 ```sh
-$ ./start-notifier
+$ ./notifier.py "path/to/config.ini"
 ```
+
+Or install the application [setuptools](https://pypi.org/project/setuptools/) (see `setup.py`).
