@@ -1,0 +1,23 @@
+[ts3]
+
+# ip to teamspeak server
+host = 127.0.0.1
+
+# port to server query (10011 is default)
+port = 10011
+
+# username and password for server query
+username = user
+password = s3cuR3-PW
+
+# server id (see serverlist command)
+server_id = 1
+
+
+[notifier]
+
+# client server group id to identifier user group which get the notification
+server_group_id = 6
+
+# current teamspeak version
+current_version = 1.2.3
