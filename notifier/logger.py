@@ -8,4 +8,4 @@ def log_info(message):
     log("info ", message)
 
 def log(type, message):
-    print("[{}] {}".format(type.upper(), message))
+    print("[{}] {}".format(type.upper(), message), flush=True)
