@@ -53,18 +53,30 @@ class ServerQuery:
 
         log_info("send message to client {}".format(nickname))
 
-    def handle_client_left(self, message_parts):
-        # check for client disconnect
-        if "reasonid=8" in message_parts:
-            log_info("client disconnected")
-            sys.exit(3)
-
+    def handle_client_left(self, message_parts, current_client_id):
         # check for server down
         if "reasonid=11" in message_parts:
             log_info("server shutdown received")
             sys.exit(3)
 
+        # check for client disconnect
+        if "clid=".format(current_client_id) in message_parts:
+            log_info("client disconnected")
+            sys.exit(3)
+
     def notifier(self, server_group_id, version_manager):
+        self.socket.write("whoami")
+        message = self.socket.read()
+        self.check_ok()
+        message_parts = message.split(" ")
+
+        current_client_id = None
+        for part in message_parts:
+            if part.startswith("client_id="):
+                current_client_id = part.lstrip("client_id=")
+
+        log_debug("current client id: {}".format(current_client_id))
+
         self.socket.write("servernotifyregister event=server")
         self.check_ok()
 
@@ -77,4 +89,4 @@ class ServerQuery:
             if message_parts[0] == "notifycliententerview":
                 self.handle_client_enter(message_parts, server_group_id, version_manager)
             elif message_parts[0] == "notifyclientleftview":
-                self.handle_client_left(message_parts)
+                self.handle_client_left(message_parts, current_client_id)
