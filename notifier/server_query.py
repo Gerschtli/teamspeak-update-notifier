@@ -52,6 +52,11 @@ class ServerQuery:
         log_info("send message to client {}".format(nickname))
 
     def handle_client_left(self, message_parts):
+        # check for client disconnect
+        if "reasonid=8" in message_parts:
+            log_info("client disconnected")
+            sys.exit(3)
+
         # check for server down
         if "reasonid=11" in message_parts:
             log_info("server shutdown received")
