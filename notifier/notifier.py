@@ -23,9 +23,7 @@ def main():
     try:
         custom_socket = Socket()
         custom_socket.connect(
-            conf.get("ts3", "host"),
-            conf.getint("ts3", "port")
-        )
+            conf.get("ts3", "host"), conf.getint("ts3", "port"))
     except:
         custom_socket.close()
 
@@ -36,19 +34,14 @@ def main():
     try:
         server_query = ServerQuery(custom_socket)
         server_query.connect(
-            conf.get("ts3", "username"),
-            conf.get("ts3", "password"),
-            conf.get("ts3", "server_id")
-        )
+            conf.get("ts3", "username"), conf.get("ts3", "password"),
+            conf.get("ts3", "server_id"))
 
         version_manager = VersionManager(
-            conf.get("notifier", "current_version")
-        )
+            conf.get("notifier", "current_version"))
 
         server_query.notifier(
-            conf.get("notifier", "server_group_id"),
-            version_manager
-        )
+            conf.get("notifier", "server_group_id"), version_manager)
     finally:
         server_query.close()
 

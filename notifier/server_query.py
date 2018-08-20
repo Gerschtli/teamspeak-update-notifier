@@ -2,6 +2,7 @@ from time import sleep
 import sys
 from .logger import log_debug, log_error, log_info
 
+
 class ServerQuery:
     def __init__(self, socket):
         self.socket = socket
@@ -9,7 +10,8 @@ class ServerQuery:
     def check_ok(self):
         message = self.socket.read()
         if message != "error id=0 msg=ok":
-            log_error("an error occured performing '{}': {}".format(self.socket.last_message, message))
+            log_error("an error occured performing '{}': {}".format(
+                self.socket.last_message, message))
             sys.exit(2)
 
     def close(self):
@@ -18,8 +20,8 @@ class ServerQuery:
         log_info("server query closed")
 
     def connect(self, username, password, server_id):
-        self.socket.read() # ignore initial messages
-        self.socket.read() # ignore initial messages
+        self.socket.read()  # ignore initial messages
+        self.socket.read()  # ignore initial messages
         self.socket.write("login {} {}".format(username, password))
         self.check_ok()
 
@@ -28,7 +30,8 @@ class ServerQuery:
 
         log_info("server query connected")
 
-    def handle_client_enter(self, message_parts, server_group_id, version_manager):
+    def handle_client_enter(self, message_parts, server_group_id,
+                            version_manager):
         client_id = None
         servergroups = None
         nickname = None
@@ -41,15 +44,20 @@ class ServerQuery:
             elif part.startswith("client_servergroups="):
                 servergroups = part.lstrip("client_servergroups=")
 
-        log_debug("client {} (id: {}) with server group {} entered".format(nickname, client_id, servergroups))
+        log_debug("client {} (id: {}) with server group {} entered".format(
+            nickname, client_id, servergroups))
 
-        if servergroups != str(server_group_id) or not version_manager.need_update():
+        if servergroups != str(
+                server_group_id) or not version_manager.need_update():
             return
 
-        message = "Please update your server to version {}!".format(version_manager.recent_version())
+        message = "Please update your server to version {}!".format(
+            version_manager.recent_version())
         message = message.replace(" ", "\s")
-        self.socket.write("sendtextmessage targetmode=1 target={} msg={}".format(client_id, message))
-        self.socket.read() # ignore notifytextmessage
+        self.socket.write(
+            "sendtextmessage targetmode=1 target={} msg={}".format(
+                client_id, message))
+        self.socket.read()  # ignore notifytextmessage
         self.check_ok()
 
         log_info("send message to client {}".format(nickname))
@@ -94,6 +102,7 @@ class ServerQuery:
             log_info("received {}".format(message_parts[0]))
 
             if message_parts[0] == "notifycliententerview":
-                self.handle_client_enter(message_parts, server_group_id, version_manager)
+                self.handle_client_enter(message_parts, server_group_id,
+                                         version_manager)
             elif message_parts[0] == "notifyclientleftview":
                 self.handle_client_left(message_parts, current_client_id)

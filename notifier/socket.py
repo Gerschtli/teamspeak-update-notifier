@@ -1,5 +1,5 @@
 import socket
-from .logger import log_debug, log_error, log_info
+from .logger import log_debug, log_info
 
 
 class Socket:

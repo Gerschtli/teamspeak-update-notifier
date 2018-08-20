@@ -5,7 +5,7 @@ from .logger import log_debug, log_info
 
 
 class VersionManager:
-    cache_time = 86400 # one day in seconds
+    cache_time = 86400  # one day in seconds
     last_updated = None
     version = None
 
@@ -16,16 +16,16 @@ class VersionManager:
         recent_version = self.recent_version()
         result = self.current_version != self.recent_version()
 
-        log_debug("current version {} - recent version {} - update {}"
-            .format(self.current_version, recent_version, result))
+        log_debug("current version {} - recent version {} - update {}".format(
+            self.current_version, recent_version, result))
 
         return result
 
     def recent_version(self):
         current_timestamp = time.time()
         if self.version is not None \
-            and self.last_updated is not None \
-            and self.last_updated > current_timestamp - self.cache_time:
+                and self.last_updated is not None \
+                and self.last_updated > current_timestamp - self.cache_time:
             return self.version
 
         link = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
