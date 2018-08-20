@@ -1,3 +1,4 @@
+from time import sleep
 import sys
 from .logger import log_debug, log_error, log_info
 
@@ -81,7 +82,13 @@ class ServerQuery:
         self.check_ok()
 
         while True:
+            sleep(1)
+
             message = self.socket.read()
+            if message == "":
+                log_error("empty message received")
+                sys.exit(3)
+
             message_parts = message.split(" ")
 
             log_info("received {}".format(message_parts[0]))
