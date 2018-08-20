@@ -17,7 +17,8 @@ class ServerQuery:
         log_info("server query closed")
 
     def connect(self, username, password, server_id):
-        self.socket.read() # ignore initial message
+        self.socket.read() # ignore initial messages
+        self.socket.read() # ignore initial messages
         self.socket.write("login {} {}".format(username, password))
         self.check_ok()
 

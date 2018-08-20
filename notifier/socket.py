@@ -3,6 +3,7 @@ from .logger import log_debug, log_error, log_info
 
 
 class Socket:
+    received_buffer = []
     buffer_size = 2048
     is_connected = False
     last_message = None
@@ -21,11 +22,19 @@ class Socket:
         log_info("socket connected")
 
     def read(self):
+        if len(self.received_buffer) > 0:
+            return self.received_buffer.pop(0)
+
         message = self.socket.recv(self.buffer_size)
         message = message.decode("utf-8")
         message = message.rstrip(self.message_end)
-        log_debug("read message: {}".format(message))
-        return message
+        messages = message.split(self.message_end)
+
+        if len(messages) > 1:
+            self.received_buffer.extend(messages[1:])
+
+        log_debug("read message: {}".format(messages[0]))
+        return messages[0]
 
     def write(self, message):
         log_debug("write message: {}".format(message))
