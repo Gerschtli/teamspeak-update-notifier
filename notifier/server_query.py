@@ -47,7 +47,8 @@ class ServerQuery:
 
         message = "Please update your server to version {}!".format(version_manager.recent_version())
         message = message.replace(" ", "\s")
-        self.socket.write("sendtextmessage targetmode=3 target={} msg={}".format(client_id, message))
+        self.socket.write("sendtextmessage targetmode=1 target={} msg={}".format(client_id, message))
+        self.socket.read() # ignore notifytextmessage
         self.check_ok()
 
         log_info("send message to client {}".format(nickname))
