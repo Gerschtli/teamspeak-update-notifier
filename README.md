@@ -5,7 +5,7 @@ incompatibility between server and client? If you did, this tool might help you 
 
 ## What does it do?
 
-Whenever a server admin connects to your server, the most recent released teampspeak server version will be fetched and
+Whenever a server admin connects to your server, the most recent released teamspeak server version will be fetched and
 compared to the current installed version of teamspeak. If there is any discrepancy, the admin will get a nice little
 private message like:
 ```
