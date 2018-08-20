@@ -35,7 +35,7 @@ class ServerQuery:
         for part in message_parts:
             if part.startswith("clid="):
                 client_id = part.lstrip("clid=")
-            if part.startswith("client_nickname="):
+            elif part.startswith("client_nickname="):
                 nickname = part.lstrip("client_nickname=")
             elif part.startswith("client_servergroups="):
                 servergroups = part.lstrip("client_servergroups=")
