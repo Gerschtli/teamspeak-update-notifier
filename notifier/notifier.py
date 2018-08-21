@@ -1,51 +1,25 @@
 from configparser import ConfigParser
+from .container import IocContainer
 import argparse
-import signal
-import sys
+# import logging
 
-from .socket import Socket
-from .server_query import ServerQuery
-from .version_manager import VersionManager
-from .logger import log_error, log_info
+from .logger import log_info
 
 
 def main():
+    # parse command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("config", help="Path to config file.")
     args = parser.parse_args()
 
-    conf = ConfigParser()
-    conf.read(args.config)
+    # load config
+    config = ConfigParser()
+    config.read(args.config)
+    config_dict = {s: dict(config.items(s)) for s in config.sections()}
     log_info("loaded config")
 
-    signal.signal(signal.SIGTERM, sigterm_handler)
+    # set up container
+    container = IocContainer(config=config_dict)
+    # container.logger().addHandler(logging.StreamHandler(sys.stdout))
 
-    try:
-        custom_socket = Socket()
-        custom_socket.connect(
-            conf.get("ts3", "host"), conf.getint("ts3", "port"))
-    except:
-        custom_socket.close()
-
-    if not custom_socket.is_connected:
-        log_error("socket not conntected")
-        sys.exit(1)
-
-    try:
-        server_query = ServerQuery(custom_socket)
-        server_query.connect(
-            conf.get("ts3", "username"), conf.get("ts3", "password"),
-            conf.get("ts3", "server_id"))
-
-        version_manager = VersionManager(
-            conf.get("notifier", "current_version"))
-
-        server_query.notifier(
-            conf.get("notifier", "server_group_id"), version_manager)
-    finally:
-        server_query.close()
-
-
-def sigterm_handler(_signo, _stack_frame):
-    # Raises SystemExit(0):
-    sys.exit(0)
+    container.entry_point()

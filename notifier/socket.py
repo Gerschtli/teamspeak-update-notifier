@@ -6,21 +6,25 @@ from .message import Message
 class Socket:
     received_buffer = []
     buffer_size = 2048
-    is_connected = False
     last_message = None
     message_end = "\n\r"
 
-    def __init__(self):
+    def __init__(self, host, port):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.host = host
+        self.port = int(port)
 
     def close(self):
         self.socket.close()
         log_info("socket closed")
 
-    def connect(self, host, port):
-        self.socket.connect((host, port))
-        self.is_connected = True
-        log_info("socket connected")
+    def connect(self):
+        try:
+            self.socket.connect((self.host, self.port))
+            log_info("socket connected")
+            return True
+        except:
+            return False
 
     def read(self, ignore=False):
         if len(self.received_buffer) > 0:
