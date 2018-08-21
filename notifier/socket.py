@@ -1,5 +1,6 @@
 import socket
 from .logger import log_debug, log_info
+from .message import Message
 
 
 class Socket:
@@ -21,9 +22,10 @@ class Socket:
         self.is_connected = True
         log_info("socket connected")
 
-    def read(self):
+    def read(self, ignore=False):
         if len(self.received_buffer) > 0:
-            return self.received_buffer.pop(0)
+            message = self.received_buffer.pop(0)
+            return None if ignore else Message.build_from_string(message)
 
         message = self.socket.recv(self.buffer_size)
         message = message.decode("utf-8")
@@ -34,10 +36,10 @@ class Socket:
             self.received_buffer.extend(messages[1:])
 
         log_debug("read message: {}".format(messages[0]))
-        return messages[0]
+        return None if ignore else Message.build_from_string(messages[0])
 
     def write(self, message):
         log_debug("write message: {}".format(message))
         self.last_message = message
-        message += self.message_end
-        self.socket.send(str.encode(message))
+        message_string = str(message) + self.message_end
+        self.socket.send(str.encode(message_string))
