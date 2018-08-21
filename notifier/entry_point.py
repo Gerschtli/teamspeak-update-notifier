@@ -3,10 +3,10 @@ import sys
 
 
 def start(server_query):
-    signal.signal(signal.SIGTERM, sigterm_handler)
+    server_query.connect()
 
     try:
-        server_query.connect()
+        signal.signal(signal.SIGTERM, sigterm_handler)
         server_query.notifier()
     finally:
         server_query.close()

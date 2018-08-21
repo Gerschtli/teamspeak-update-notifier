@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 import time
-from .logger import log_debug, log_info
 
 
 class VersionManager:
@@ -9,15 +8,17 @@ class VersionManager:
     last_updated = None
     version = None
 
-    def __init__(self, current_version):
+    def __init__(self, logger, current_version):
+        self.logger = logger
         self.current_version = current_version
 
     def need_update(self):
         recent_version = self.recent_version()
         result = self.current_version != self.recent_version()
 
-        log_debug("current version {} - recent version {} - update {}".format(
-            self.current_version, recent_version, result))
+        self.logger.debug(
+            "current version {} - recent version {} - update {}".format(
+                self.current_version, recent_version, result))
 
         return result
 
@@ -37,6 +38,6 @@ class VersionManager:
         self.version = version
         self.last_updated = current_timestamp
 
-        log_info("updated recent version cache")
+        self.logger.info("updated recent version cache")
 
         return version

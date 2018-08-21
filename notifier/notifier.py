@@ -1,9 +1,8 @@
 from configparser import ConfigParser
 from .container import IocContainer
 import argparse
-# import logging
-
-from .logger import log_info
+import logging
+import sys
 
 
 def main():
@@ -16,10 +15,14 @@ def main():
     config = ConfigParser()
     config.read(args.config)
     config_dict = {s: dict(config.items(s)) for s in config.sections()}
-    log_info("loaded config")
 
     # set up container
     container = IocContainer(config=config_dict)
-    # container.logger().addHandler(logging.StreamHandler(sys.stdout))
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(
+        logging.Formatter("[{levelname}] {message}", style="{"))
+    # handler.setLevel(logging.INFO)
+    container.logger().addHandler(handler)
 
     container.entry_point()

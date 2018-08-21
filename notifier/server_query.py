@@ -1,14 +1,14 @@
 from time import sleep
 import sys
-from .logger import log_debug, log_error, log_info
 from .message import Message
 
 
 class ServerQuery:
-    def __init__(self, socket, version_manager, username, password, server_id,
-                 server_group_id):
+    def __init__(self, socket, version_manager, logger, username, password,
+                 server_id, server_group_id):
         self.socket = socket
         self.version_manager = version_manager
+        self.logger = logger
         self.username = username
         self.password = password
         self.server_id = server_id
@@ -19,18 +19,18 @@ class ServerQuery:
         if message.command == "error" and message.param("msg") == "ok":
             return
 
-        log_error("an error occured performing '{}': {}".format(
+        self.logger.error("an error occured performing '{}': {}".format(
             self.socket.last_message, message))
         sys.exit(2)
 
     def close(self):
         self.socket.write(Message("quit"))
         self.socket.close()
-        log_info("server query closed")
+        self.logger.info("server query closed")
 
     def connect(self):
         if not self.socket.connect():
-            log_error("socket not conntected")
+            self.logger.error("socket not conntected")
             sys.exit(1)
 
         self.socket.read(ignore=True)  # ignore initial messages
@@ -46,15 +46,16 @@ class ServerQuery:
         self.socket.write(Message("use", {"sid": self.server_id}))
         self.check_ok()
 
-        log_info("server query connected")
+        self.logger.info("server query connected")
 
     def handle_client_enter(self, message):
         client_id = message.param("clid")
         servergroups = message.param("client_servergroups")
         nickname = message.param("client_nickname")
 
-        log_debug("client {} (id: {}) with server group {} entered".format(
-            nickname, client_id, servergroups))
+        self.logger.debug(
+            "client {} (id: {}) with server group {} entered".format(
+                nickname, client_id, servergroups))
 
         if servergroups != self.server_group_id \
                 or not self.version_manager.need_update():
@@ -72,17 +73,17 @@ class ServerQuery:
         self.socket.read(ignore=True)  # ignore notifytextmessage
         self.check_ok()
 
-        log_info("send message to client {}".format(nickname))
+        self.logger.info("send message to client {}".format(nickname))
 
     def handle_client_left(self, message, current_client_id):
         # check for server down
         if message.param("reasonid") == "11":
-            log_info("server shutdown received")
+            self.logger.info("server shutdown received")
             sys.exit(3)
 
         # check for client disconnect
         if message.param("clid") == current_client_id:
-            log_info("client disconnected")
+            self.logger.info("client disconnected")
             sys.exit(3)
 
     def current_client_id(self):
@@ -91,7 +92,7 @@ class ServerQuery:
         self.check_ok()
 
         client_id = message.param("client_id")
-        log_debug("current client id: {}".format(client_id))
+        self.logger.debug("current client id: {}".format(client_id))
 
         return client_id
 
@@ -106,10 +107,10 @@ class ServerQuery:
 
             message = self.socket.read()
             if message is None:
-                log_error("empty message received")
+                self.logger.error("empty message received")
                 sys.exit(3)
 
-            log_info("received {}".format(message.command))
+            self.logger.info("received {}".format(message.command))
 
             if message.command == "notifycliententerview":
                 self.handle_client_enter(message)
