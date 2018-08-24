@@ -1,3 +1,6 @@
+from .errors import EmptyMessageError
+
+
 class Message:
     delimeter_param = " "
     delimeter_kv = "="
@@ -14,7 +17,7 @@ class Message:
 
     def build_from_string(message):
         if message == "":
-            return None
+            raise EmptyMessageError("empty message received")
 
         message_parts = message.split(Message.delimeter_param)
         command = message_parts.pop(0)
