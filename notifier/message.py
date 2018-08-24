@@ -43,11 +43,13 @@ class Message:
         return string
 
     def param(self, key):
-        return self._params[key]
+        return self._params.get(key)
 
     def __repr__(self):
         encoded_params = [
-            "{}{}{}".format(key, Message.delimeter_kv, Message.encode(value))
+            "".join([key, Message.delimeter_kv,
+                     Message.encode(value)])
             for key, value in self._params.items()
         ]
+
         return Message.delimeter_param.join([self.command] + encoded_params)
