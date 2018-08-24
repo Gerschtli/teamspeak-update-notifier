@@ -10,7 +10,7 @@ setup(
         "console_scripts":
         ['teamspeak-update-notifier = notifier.notifier:main']
     },
-    version="1.3.0",
+    version="1.3.1",
     description=("Sends update notifications to server admins for teamspeak "
                  "server."),
     long_description=long_descr,
