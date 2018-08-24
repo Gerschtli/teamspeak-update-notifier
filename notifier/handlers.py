@@ -4,10 +4,8 @@ from .errors import MessageError, ServerDisconnectError
 
 
 class HandlerFactory:
-    def __init__(self, logger, notifier, socket, version_manager,
-                 server_group_id):
+    def __init__(self, logger, socket, version_manager, server_group_id):
         self.logger = logger
-        self.notifier = notifier
         self.socket = socket
         self.version_manager = version_manager
         self.server_group_id = server_group_id
@@ -15,7 +13,6 @@ class HandlerFactory:
     def client_enter(self):
         return ClientEnter(
             self.logger,
-            self.notifier,
             self.version_manager,
             self.server_group_id,
         )
@@ -31,9 +28,8 @@ class HandlerFactory:
 
 
 class ClientEnter:
-    def __init__(self, logger, notifier, version_manager, server_group_id):
+    def __init__(self, logger, version_manager, server_group_id):
         self.logger = logger
-        self.notifier = notifier
         self.version_manager = version_manager
         self.server_group_id = server_group_id
 
@@ -53,8 +49,7 @@ class ClientEnter:
                 or not self.version_manager.need_update()):
             return
 
-        version = self.version_manager.recent_version()
-        self.notifier.send_message(client_id, nickname, version)
+        self.version_manager.send_message(client_id, nickname)
 
 
 class ClientLeft:

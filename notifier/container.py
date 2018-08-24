@@ -6,7 +6,7 @@ from .commands import CommandFactory
 from .handlers import HandlerFactory
 from .entry_point import start
 from .socket import Socket
-from .version_manager import Notifier, VersionManager
+from .version_manager import VersionManager
 
 
 class IocContainer(containers.DeclarativeContainer):
@@ -20,12 +20,6 @@ class IocContainer(containers.DeclarativeContainer):
         port=config.ts3.port,
     )
 
-    version_manager = providers.Singleton(
-        VersionManager,
-        logger=logger,
-        current_version=config.notifier.current_version,
-    )
-
     command_factory = providers.Singleton(
         CommandFactory,
         username=config.ts3.username,
@@ -33,17 +27,17 @@ class IocContainer(containers.DeclarativeContainer):
         server_id=config.ts3.server_id,
     )
 
-    notifier = providers.Singleton(
-        Notifier,
+    version_manager = providers.Singleton(
+        VersionManager,
         command_factory=command_factory,
         logger=logger,
         socket=socket,
+        current_version=config.notifier.current_version,
     )
 
     handler_factory = providers.Singleton(
         HandlerFactory,
         logger=logger,
-        notifier=notifier,
         socket=socket,
         version_manager=version_manager,
         server_group_id=config.notifier.server_group_id,
