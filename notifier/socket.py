@@ -26,7 +26,7 @@ class Socket:
             self.logger.info("socket connected")
         except socket.error as error:
             self.logger.exception("socket connect failed")
-            raise ConnectionError()
+            raise ConnectionError("socket connect failed")
 
     def read(self, ignore=False):
         if len(self.received_buffer) > 0:
