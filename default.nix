@@ -20,7 +20,7 @@ in
 
 python36.pkgs.buildPythonPackage rec {
   pname = "teamspeak-update-notifier";
-  version = "1.2.0";
+  version = "HEAD";
 
   src = ./.;
 
