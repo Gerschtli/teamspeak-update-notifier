@@ -48,4 +48,6 @@ in
   name = old.pname;
 
   buildInputs = old.buildInputs ++ [ python-language-server ];
+
+  PYTHONDONTWRITEBYTECODE = 1;
 })
