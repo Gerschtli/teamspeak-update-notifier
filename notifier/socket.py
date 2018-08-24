@@ -1,4 +1,6 @@
 import socket
+
+from .errors import ConnectionError
 from .message import Message
 
 
@@ -22,10 +24,9 @@ class Socket:
         try:
             self.socket.connect((self.host, self.port))
             self.logger.info("socket connected")
-            return True
         except socket.error as error:
             self.logger.exception("socket connect failed")
-            return False
+            raise ConnectionError()
 
     def read(self, ignore=False):
         if len(self.received_buffer) > 0:

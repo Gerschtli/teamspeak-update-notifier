@@ -1,8 +1,10 @@
-from configparser import ConfigParser
-from .container import IocContainer
 import argparse
+from configparser import ConfigParser
 import logging
 import sys
+
+from .container import IocContainer
+from .errors import Error, SigTermError
 
 
 def main():
@@ -25,4 +27,12 @@ def main():
     # handler.setLevel(logging.INFO)
     container.logger().addHandler(handler)
 
-    container.entry_point()
+    # run application
+    try:
+        container.entry_point()
+    except KeyboardInterrupt as error:
+        container.logger().info("exit cause: keyboard interrupt")
+        sys.exit(SigTermError.exit_code)
+    except Error as error:
+        container.logger().info("exit cause: {}".format(error))
+        sys.exit(error.exit_code)
