@@ -16,7 +16,7 @@ Pretty neat!
 
 ## What do I have to do?
 
-You need `python3` with `beautifulsoup4` and `requests` packages installed.
+You need `python3` with `beautifulsoup4`, `dependency_injector` and `requests` packages installed.
 
 Setup a config file like `config.ini.dist`. The options are described in comments in the sample config.
 
