@@ -41,3 +41,18 @@ class VersionManager:
         self.logger.info("updated recent version cache")
 
         return version
+
+
+class Notifier:
+    def __init__(self, command_factory, logger, socket):
+        self.command_factory = command_factory
+        self.logger = logger
+        self.socket = socket
+
+    def send_message(self, client_id, nickname, version):
+        message = "Please update your server to version {}!".format(version)
+
+        self.socket.write(
+            self.command_factory.send_message(client_id, message))
+
+        self.logger.info("send message to client {}".format(nickname))
