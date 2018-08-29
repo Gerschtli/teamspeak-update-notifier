@@ -4,7 +4,7 @@ with open("README.md", "rb") as f:
     long_descr = f.read().decode("utf-8")
 
 with open("requirements.txt", "rb") as f:
-    requirements = f.read().splitlines()
+    requirements = f.read().decode("utf-8").splitlines()
 
 setup(
     name="teamspeak-update-notifier",
