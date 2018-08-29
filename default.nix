@@ -24,8 +24,6 @@ python36.pkgs.buildPythonPackage rec {
 
   src = ./.;
 
-  doCheck = false;
-
   propagatedBuildInputs = with python36Packages; [
     beautifulsoup4
     dependency_injector
