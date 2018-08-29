@@ -1,7 +1,8 @@
-import argparse
-from configparser import ConfigParser
 import logging
 import sys
+
+import argparse
+from configparser import ConfigParser
 
 from .container import IocContainer
 from .errors import Error, SigTermError

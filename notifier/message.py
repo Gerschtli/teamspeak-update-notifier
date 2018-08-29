@@ -6,15 +6,16 @@ class Message:
     delimeter_kv = "="
     encode_matrix = [
         ["\\", "\\\\"],
-        ["/", "\/"],
-        [" ", "\s"],
-        ["|", "\p"],
+        ["/", r"\/"],
+        [" ", r"\s"],
+        ["|", r"\p"],
     ]
 
-    def __init__(self, command, params={}):
+    def __init__(self, command, params=None):
         self.command = command
-        self._params = params
+        self._params = params if params is not None else {}
 
+    @staticmethod
     def build_from_string(message):
         if message == "":
             raise EmptyMessageError("empty message received")
@@ -33,12 +34,14 @@ class Message:
 
         return Message(command, params)
 
+    @staticmethod
     def decode(string):
         for (original, encoded) in Message.encode_matrix:
             string = string.replace(encoded, original)
 
         return string
 
+    @staticmethod
     def encode(string):
         for (original, encoded) in Message.encode_matrix:
             string = string.replace(original, encoded)

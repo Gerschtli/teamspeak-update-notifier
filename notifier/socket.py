@@ -1,6 +1,6 @@
 import socket
 
-from .errors import ConnectionError
+from .errors import SocketConnectionError
 from .message import Message
 
 
@@ -24,12 +24,12 @@ class Socket:
         try:
             self.socket.connect((self.host, self.port))
             self.logger.info("socket connected")
-        except socket.error as error:
+        except socket.error:
             self.logger.exception("socket connect failed")
-            raise ConnectionError("socket connect failed")
+            raise SocketConnectionError("socket connect failed")
 
     def read(self, ignore=False):
-        if len(self.received_buffer) > 0:
+        if self.received_buffer:
             return self.read_from_buffer(ignore)
 
         message = self.socket.recv(self.buffer_size)
@@ -45,7 +45,7 @@ class Socket:
         message = self.received_buffer.pop(0)
         if ignore:
             self.logger.debug("ignoring message: {}".format(message))
-            return
+            return None
 
         self.logger.debug("read message: {}".format(message))
         return Message.build_from_string(message)

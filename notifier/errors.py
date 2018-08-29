@@ -2,7 +2,7 @@ class Error(Exception):
     exit_code = 127
 
 
-class ConnectionError(Error):
+class SocketConnectionError(Error):
     exit_code = 1
 
 

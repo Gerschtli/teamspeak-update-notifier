@@ -1,15 +1,18 @@
-from dependency_injector import containers, providers
 import logging
+
+from dependency_injector import containers, providers
 
 from .client import Client
 from .commands import CommandFactory
-from .handlers import HandlerFactory
 from .entry_point import start
+from .handlers import HandlerFactory
 from .socket import Socket
 from .version_manager import VersionManager
 
 
 class IocContainer(containers.DeclarativeContainer):
+    # pylint: disable=no-member
+
     config = providers.Configuration("config")
     logger = providers.Singleton(logging.Logger, name="notifier")
 

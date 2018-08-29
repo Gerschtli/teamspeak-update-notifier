@@ -10,19 +10,23 @@ class CommandFactory:
     def login(self):
         return Login(self.username, self.password)
 
-    def notify_register(self):
+    @staticmethod
+    def notify_register():
         return NotifyRegister()
 
-    def quit(self):
+    @staticmethod
+    def quit():
         return Quit()
 
-    def send_message(self, client_id, message):
+    @staticmethod
+    def send_message(client_id, message):
         return SendMessage(client_id, message)
 
     def use(self):
         return Use(self.server_id)
 
-    def whoami(self):
+    @staticmethod
+    def whoami():
         return Whoami()
 
 

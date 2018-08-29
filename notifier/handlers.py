@@ -17,13 +17,15 @@ class HandlerFactory:
             self.server_group_id,
         )
 
-    def client_left(self, client_id):
+    @staticmethod
+    def client_left(client_id):
         return ClientLeft(client_id)
 
     def error(self):
         return Error(self.socket)
 
-    def whoami(self):
+    @staticmethod
+    def whoami():
         return Whoami()
 
 
@@ -33,7 +35,10 @@ class ClientEnter:
         self.version_manager = version_manager
         self.server_group_id = server_group_id
 
-    def match(self, message):
+        print(self.version_manager.need_update())
+
+    @staticmethod
+    def match(message):
         return message.command == "notifycliententerview"
 
     def execute(self, message):
@@ -56,7 +61,8 @@ class ClientLeft:
     def __init__(self, client_id):
         self.client_id = client_id
 
-    def match(self, message):
+    @staticmethod
+    def match(message):
         return message.command == "notifyclientleftview"
 
     def execute(self, message):
@@ -84,7 +90,8 @@ class Error:
 class Whoami:
     return_value = True
 
-    def execute(self, message):
-        WhoamiResponse = namedtuple("WhoamiResponse", ["client_id"])
+    @staticmethod
+    def execute(message):
+        whoami_response = namedtuple("WhoamiResponse", ["client_id"])
 
-        return WhoamiResponse(message.param("client_id"))
+        return whoami_response(message.param("client_id"))

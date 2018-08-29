@@ -1,5 +1,5 @@
-from .errors import ConnectionError, ServerDisconnectError
 from .commands import SendMessage, Whoami
+from .errors import SocketConnectionError, ServerDisconnectError
 
 
 class Client:
@@ -36,11 +36,8 @@ class Client:
 
             for handler in self.handlers:
                 if handler.match(message):
+                    handler.execute(message)
                     break
-            else:
-                continue
-
-            handler.execute(message)
 
     def skip_messages(self, count):
         for __ in range(count):
@@ -51,8 +48,10 @@ class Client:
 
         return self
 
-    def __exit__(self, type, value, traceback):
-        should_quit = type not in [ConnectionError, ServerDisconnectError]
+    def __exit__(self, exception_type, exception_value, traceback):
+        should_quit = exception_type not in [
+            SocketConnectionError, ServerDisconnectError
+        ]
         if should_quit and self.quit_command is not None:
             self.execute(self.quit_command)
 

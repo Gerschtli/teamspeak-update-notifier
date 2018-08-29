@@ -1,6 +1,7 @@
+import time
+
 from bs4 import BeautifulSoup
 import requests
-import time
 
 
 def cache_version(original_function):
@@ -25,6 +26,7 @@ def cache_version(original_function):
 class VersionManager:
     cache_time = 86400  # one day in seconds
     last_updated = None
+    link = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
     version = None
 
     def __init__(self, command_factory, logger, socket, current_version):
@@ -54,8 +56,7 @@ class VersionManager:
 
     @cache_version
     def recent_version(self):
-        link = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
-        data = requests.get(link)
+        data = requests.get(self.link)
 
         soup = BeautifulSoup(data.text, "html.parser")
         version = soup.select("[itemprop=softwareVersion]")[0].text
