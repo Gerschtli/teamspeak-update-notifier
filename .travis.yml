@@ -12,6 +12,11 @@ script:
   - find . -maxdepth 2 -type f -name "__init__.py" -exec dirname {} \; | xargs -I % pylint %
   - python setup.py test
 
+addons:
+  apt:
+    packages:
+      - pylint
+
 notifications:
   email:
     on_success: never
