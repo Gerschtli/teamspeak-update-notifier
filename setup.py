@@ -17,4 +17,11 @@ setup(
     author="Tobias Happ",
     author_email="tobias.happ@gmx.de",
     url="https://github.com/Gerschtli/teamspeak-update-notifier",
+    license='MIT',
+    install_requires=[
+        'beautifulsoup4',
+        'dependency_injector',
+        'requests',
+    ],
+    test_suite="tests",
 )
