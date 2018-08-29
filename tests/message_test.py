@@ -9,4 +9,8 @@ class MessageTest(unittest.TestCase):
         self.assertEqual(message.command, "login")
         self.assertEqual(message.param("user"), "hans")
         self.assertEqual(message.param("password"), "georg")
-        self.assertEqual(str(message), "login user=hans password=georg")
+
+        repr = str(message)
+        self.assertTrue(repr.startswith("login "))
+        self.assertIn("user=hans", repr)
+        self.assertIn("password=georg", repr)
