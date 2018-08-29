@@ -1,0 +1,7 @@
+[MASTER]
+extension-pkg-whitelist=dependency_injector
+
+[MESSAGES CONTROL]
+disable=missing-docstring,too-few-public-methods
+
+# vim: ft=ini
