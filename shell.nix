@@ -47,10 +47,11 @@ in
 (import ./.).overrideDerivation (old: {
   name = old.pname;
 
-  buildInputs = old.buildInputs ++ [
-    python36Packages.pylint
-    python-language-server
-  ];
+  buildInputs = old.buildInputs
+    ++ (with python36Packages; [
+      pycodestyle pyflakes pylint
+    ])
+    ++ [ python-language-server ];
 
   PYTHONDONTWRITEBYTECODE = 1;
 })
