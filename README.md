@@ -1,4 +1,4 @@
-# teamspeak update notifier
+# Teamspeak Update Notifier [![Travis CI](https://img.shields.io/travis/Gerschtli/teamspeak-update-notifier.svg?style=flat-square)](https://travis-ci.org/Gerschtli/teamspeak-update-notifier)
 
 Do you ever came across the day when you could not connect to your own teamspeak server because of a version
 incompatibility between server and client? If you did, this tool might help you to never feel this pain.
