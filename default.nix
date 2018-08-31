@@ -12,8 +12,6 @@ let
       sha256 = "03cn4aanz6q28vy5946bpbmnpg25szzp0q3m4wk82ardw5j6x07i";
     };
 
-    doCheck = false;
-
     propagatedBuildInputs = with python36Packages; [ six ];
   };
 in
