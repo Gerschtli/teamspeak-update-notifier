@@ -11,5 +11,5 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
-  - ./lint.sh
+  - ./ci/lint.sh
   - python setup.py test
