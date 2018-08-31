@@ -31,7 +31,7 @@ def main():
     # run application
     try:
         container.entry_point()
-    except KeyboardInterrupt as error:
+    except KeyboardInterrupt:
         container.logger().info("exit cause: keyboard interrupt")
         sys.exit(SigTermError.exit_code)
     except Error as error:
