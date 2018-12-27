@@ -1,6 +1,5 @@
 [run]
 branch = True
-command_line = setup.py test
 
 [paths]
 source = notifier/
