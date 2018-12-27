@@ -1,3 +1,4 @@
+from typing import List
 import socket
 
 from .errors import SocketConnectionError
@@ -5,7 +6,7 @@ from .message import Message
 
 
 class Socket:
-    received_buffer = []
+    received_buffer: List[Message] = []
     buffer_size = 2048
     last_message = None
     message_end = "\n\r"

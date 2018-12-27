@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from collections import namedtuple
 
 from .errors import MessageError, ServerDisconnectError
@@ -29,7 +30,18 @@ class HandlerFactory:
         return Whoami()
 
 
-class ClientEnter:
+class Handler:
+    @staticmethod
+    @abstractmethod
+    def match(message):
+        raise NotImplementedError
+
+    @abstractmethod
+    def execute(self, message):
+        raise NotImplementedError
+
+
+class ClientEnter(Handler):
     def __init__(self, logger, version_manager, server_group_id):
         self.logger = logger
         self.version_manager = version_manager
@@ -57,7 +69,7 @@ class ClientEnter:
         self.version_manager.send_message(client_id, nickname)
 
 
-class ClientLeft:
+class ClientLeft(Handler):
     def __init__(self, client_id):
         self.client_id = client_id
 
@@ -88,8 +100,6 @@ class Error:
 
 
 class Whoami:
-    return_value = True
-
     @staticmethod
     def execute(message):
         whoami_response = namedtuple("WhoamiResponse", ["client_id"])

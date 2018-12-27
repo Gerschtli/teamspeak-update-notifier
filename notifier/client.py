@@ -1,9 +1,13 @@
+from typing import List
+
 from .commands import SendMessage, Whoami
 from .errors import SocketConnectionError, ServerDisconnectError
+from .handlers import Handler
+assert Handler  # silence pyflakes
 
 
 class Client:
-    handlers = []
+    handlers: List['Handler'] = []
     quit_command = None
 
     def __init__(self, handler_factory, logger, socket):
