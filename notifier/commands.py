@@ -2,36 +2,36 @@ from .message import Message
 
 
 class CommandFactory:
-    def __init__(self, username, password, server_id):
+    def __init__(self, username: str, password: str, server_id: str) -> None:
         self.username = username
         self.password = password
         self.server_id = server_id
 
-    def login(self):
+    def login(self) -> 'Login':
         return Login(self.username, self.password)
 
     @staticmethod
-    def notify_register():
+    def notify_register() -> 'NotifyRegister':
         return NotifyRegister()
 
     @staticmethod
-    def quit():
+    def quit() -> 'Quit':
         return Quit()
 
     @staticmethod
-    def send_message(client_id, message):
+    def send_message(client_id: str, message: str) -> 'SendMessage':
         return SendMessage(client_id, message)
 
-    def use(self):
+    def use(self) -> 'Use':
         return Use(self.server_id)
 
     @staticmethod
-    def whoami():
+    def whoami() -> 'Whoami':
         return Whoami()
 
 
 class Login(Message):
-    def __init__(self, username, password):
+    def __init__(self, username: str, password: str) -> None:
         super().__init__(
             "login",
             {
@@ -42,7 +42,7 @@ class Login(Message):
 
 
 class NotifyRegister(Message):
-    def __init__(self, ):
+    def __init__(self) -> None:
         super().__init__(
             "servernotifyregister",
             {"event": "server"},
@@ -50,12 +50,12 @@ class NotifyRegister(Message):
 
 
 class Quit(Message):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("quit")
 
 
 class SendMessage(Message):
-    def __init__(self, client_id, message):
+    def __init__(self, client_id: str, message: str) -> None:
         super().__init__(
             "sendtextmessage",
             {
@@ -67,7 +67,7 @@ class SendMessage(Message):
 
 
 class Use(Message):
-    def __init__(self, server_id):
+    def __init__(self, server_id: str) -> None:
         super().__init__(
             "use",
             {"sid": server_id},
@@ -75,5 +75,5 @@ class Use(Message):
 
 
 class Whoami(Message):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("whoami")

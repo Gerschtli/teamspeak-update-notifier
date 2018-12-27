@@ -5,7 +5,7 @@ from notifier.message import Message
 
 
 class MessageTest(unittest.TestCase):
-    def test_build_from_string(self):
+    def test_build_from_string(self) -> None:
         message = Message.build_from_string(
             "login hello user=hans password=georg")
         self.assertEqual(message.command(), "login")
@@ -17,7 +17,7 @@ class MessageTest(unittest.TestCase):
         self.assertIn("user=hans", string_repr)
         self.assertIn("password=georg", string_repr)
 
-    def test_build_from_string_with_special_chars(self):
+    def test_build_from_string_with_special_chars(self) -> None:
         message = Message.build_from_string(r"command payload=test\sx\\o\/x\p")
         self.assertEqual(message.command(), "command")
         self.assertEqual(message.param("payload"), r"test x\o/x|")
@@ -25,7 +25,7 @@ class MessageTest(unittest.TestCase):
         string_repr = str(message)
         self.assertEqual(string_repr, r"command payload=test\sx\\o\/x\p")
 
-    def test_build_from_string_with_empty_message(self):
+    def test_build_from_string_with_empty_message(self) -> None:
         exception = None
 
         try:
@@ -35,7 +35,7 @@ class MessageTest(unittest.TestCase):
 
         self.assertEqual(str(exception), "empty message received")
 
-    def test_init(self):
+    def test_init(self) -> None:
         message = Message("login", {
             "user": "hans",
             "password": "georg"
@@ -49,7 +49,7 @@ class MessageTest(unittest.TestCase):
         self.assertIn("user=hans", string_repr)
         self.assertIn("password=georg", string_repr)
 
-    def test_init_with_special_chars(self):
+    def test_init_with_special_chars(self) -> None:
         message = Message("command", {"payload": r"test x\o/x|"})
         self.assertEqual(message.command(), "command")
         self.assertEqual(message.param("payload"), r"test x\o/x|")
