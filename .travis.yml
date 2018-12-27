@@ -7,13 +7,26 @@ python:
   - 3.6
   - 3.7
 
-before_install:
-  - export
-
 install:
+  - |
+    if [[ "${TRAVIS_PYTHON_VERSION}" == "3.6" ]]; then
+      pip install codecov
+      pip install coverage
+    fi
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
 
 script:
   - ./ci/lint.sh
-  - python setup.py test
+  - |
+    if [[ "${TRAVIS_PYTHON_VERSION}" == "3.6" ]]; then
+      coverage run setup.py test
+    else
+      python setup.py test
+    fi
+
+after_success:
+  - |
+    if [[ "${TRAVIS_PYTHON_VERSION}" == "3.6" ]]; then
+      codecov
+    fi
