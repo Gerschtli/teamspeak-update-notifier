@@ -15,11 +15,11 @@ class Message:
 
     def __init__(self,
                  command: str,
-                 value_params: Dict[str, str] = {},
-                 key_params: List[str] = []) -> None:
+                 value_params: Optional[Dict[str, str]] = None,
+                 key_params: Optional[List[str]] = None) -> None:
         self._command = command
-        self._value_params = value_params
-        self._key_params = key_params
+        self._value_params = {} if value_params is None else value_params
+        self._key_params = [] if key_params is None else key_params
 
     @staticmethod
     def build_from_string(message: str) -> 'Message':
