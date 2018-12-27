@@ -17,7 +17,7 @@ in
 
   buildInputs = old.buildInputs
     ++ (with python36Packages; [
-      pycodestyle pyflakes pylint python-language-server
+      pycodestyle pyflakes pylint python-language-server mypy
     ]);
 
   PYTHONDONTWRITEBYTECODE = 1;
