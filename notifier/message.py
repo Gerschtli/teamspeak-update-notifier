@@ -2,9 +2,9 @@ from .errors import EmptyMessageError
 
 
 class Message:
-    delimeter_param = " "
-    delimeter_kv = "="
-    encode_matrix = [
+    _delimeter_param = " "
+    _delimeter_kv = "="
+    _encode_matrix = [
         ["\\", "\\\\"],
         ["/", r"\/"],
         [" ", r"\s"],
@@ -12,7 +12,7 @@ class Message:
     ]
 
     def __init__(self, command, params=None):
-        self.command = command
+        self._command = command
         self._params = params if params is not None else {}
 
     @staticmethod
@@ -20,42 +20,46 @@ class Message:
         if message == "":
             raise EmptyMessageError("empty message received")
 
-        message_parts = message.split(Message.delimeter_param)
+        message_parts = message.split(Message._delimeter_param)
         command = message_parts.pop(0)
 
         params = {}
         for part in message_parts:
-            splitted = part.split(Message.delimeter_kv, 1)
+            splitted = part.split(Message._delimeter_kv, 1)
 
             key = splitted[0]
-            value = None if len(splitted) == 1 else Message.decode(splitted[1])
+            value = None if len(splitted) == 1 else Message._decode(
+                splitted[1])
 
             params[key] = value
 
         return Message(command, params)
 
+    def command(self):
+        return self._command
+
+    def param(self, key):
+        return self._params.get(key)
+
     @staticmethod
-    def decode(string):
-        for (original, encoded) in Message.encode_matrix:
+    def _decode(string):
+        for (original, encoded) in Message._encode_matrix:
             string = string.replace(encoded, original)
 
         return string
 
     @staticmethod
-    def encode(string):
-        for (original, encoded) in Message.encode_matrix:
+    def _encode(string):
+        for (original, encoded) in Message._encode_matrix:
             string = string.replace(original, encoded)
 
         return string
 
-    def param(self, key):
-        return self._params.get(key)
-
     def __repr__(self):
         encoded_params = [
-            "".join([key, Message.delimeter_kv,
-                     Message.encode(value)])
+            "".join([key, Message._delimeter_kv,
+                     Message._encode(value)])
             for key, value in self._params.items()
         ]
 
-        return Message.delimeter_param.join([self.command] + encoded_params)
+        return Message._delimeter_param.join([self._command] + encoded_params)
