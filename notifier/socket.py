@@ -44,13 +44,13 @@ class Socket:
     def read_from_buffer(self, ignore: bool = False) -> Optional[Message]:
         message = self._received_buffer.pop(0)
         if ignore:
-            app.LOGGER.debug("ignoring message: {}".format(message))
+            app.LOGGER.debug("ignoring message: %s", message)
             return None
 
-        app.LOGGER.debug("read message: {}".format(message))
+        app.LOGGER.debug("read message: %s", message)
         return Message.build_from_string(message)
 
     def write(self, message: Message) -> None:
-        app.LOGGER.debug("write message: {}".format(message))
+        app.LOGGER.debug("write message: %s", message)
         message_string = str(message) + MESSAGE_END
         self._socket.send(str.encode(message_string))

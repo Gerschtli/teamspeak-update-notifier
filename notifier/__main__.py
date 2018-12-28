@@ -37,7 +37,7 @@ def main() -> None:
         app.LOGGER.info("exit cause: keyboard interrupt")
         sys.exit(SigTermError.exit_code)
     except Error as error:
-        app.LOGGER.info("exit cause: {}".format(error))
+        app.LOGGER.info("exit cause: %s", error)
         sys.exit(error.exit_code)
 
 

@@ -3,7 +3,8 @@ import unittest
 from unittest.mock import call, Mock
 
 from notifier import app
-from notifier.commands import Login, NotifyRegister, Quit, SendMessage, Use, Whoami
+from notifier.commands import Login, NotifyRegister, Quit, SendMessage, Use, \
+    Whoami
 
 
 class CommandFactoryTest(unittest.TestCase):
