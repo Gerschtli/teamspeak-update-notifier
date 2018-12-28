@@ -12,11 +12,11 @@ def main() -> None:
     # parse command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("config", help="Path to config file.")
-    configPath: str = parser.parse_args().config
+    config_path: str = parser.parse_args().config
 
     # load config
     config = ConfigParser()
-    config.read(configPath)
+    config.read(config_path)
     config_dict = {s: dict(config.items(s)) for s in config.sections()}
 
     # set up container

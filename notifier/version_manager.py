@@ -32,7 +32,8 @@ def cache_version(original_function: Callable[['VersionManager'], str]
 class VersionManager:
     cache_time: int = 86400  # one day in seconds
     last_updated: Optional[float] = None
-    link: str = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
+    link: str = \
+        "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
     version: Optional[str] = None
 
     def __init__(self, command_factory: CommandFactory, logger: Logger,
