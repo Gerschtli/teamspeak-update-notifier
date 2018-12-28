@@ -1,17 +1,17 @@
 from setuptools import setup
 
 with open("README.md", "rb") as f:
-    long_descr = f.read().decode("utf-8")
+    long_descr = f.read().decode()
 
 with open("requirements.txt", "rb") as f:
-    requirements = f.read().decode("utf-8").splitlines()
+    requirements = f.read().decode().splitlines()
 
 setup(
     name="teamspeak-update-notifier",
     packages=["notifier"],
     entry_points={
         "console_scripts":
-        ["teamspeak-update-notifier = notifier.notifier:main"]
+        ["teamspeak-update-notifier = notifier.__main__:main"]
     },
     version="1.3.1",
     description=("Sends update notifications to server admins for teamspeak "

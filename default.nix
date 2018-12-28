@@ -8,7 +8,6 @@ python36.pkgs.buildPythonPackage rec {
 
   propagatedBuildInputs = with python36Packages; [
     beautifulsoup4
-    dependency-injector
     requests
   ];
 }
