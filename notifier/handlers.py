@@ -12,11 +12,11 @@ class Handler:
     @staticmethod
     @abstractmethod
     def match(message: Message) -> bool:
-        raise NotImplementedError
+        raise NotImplementedError()
 
     @abstractmethod
     def execute(self, message: Message) -> None:
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 class ClientEnter(Handler):
