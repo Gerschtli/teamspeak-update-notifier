@@ -1,59 +1,56 @@
 from typing import Optional, List
 import socket
-from logging import Logger
 
+from .app import CONFIG, LOGGER
 from .errors import SocketConnectionError
 from .message import Message
 
+BUFFER_SIZE: int = 2048
+MESSAGE_END: str = "\n\r"
+
 
 class Socket:
-    received_buffer: List[str] = []
-    buffer_size: int = 2048
-    last_message: Optional[Message] = None
-    message_end: str = "\n\r"
-
-    def __init__(self, logger: Logger, host: str, port: str) -> None:
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.logger = logger
-        self.host = host
-        self.port = int(port)
+    def __init__(self) -> None:
+        self._received_buffer: List[str] = []
+        self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def close(self) -> None:
-        self.socket.close()
-        self.logger.info("socket closed")
+        self._socket.close()
+        LOGGER.info("socket closed")
 
     def connect(self) -> None:
         try:
-            self.socket.connect((self.host, self.port))
-            self.logger.info("socket connected")
+            host = CONFIG.get("ts3", "host")
+            port = int(CONFIG.get("ts3", "port"))
+            self._socket.connect((host, port))
+            LOGGER.info("socket connected")
         except socket.error:
-            self.logger.exception("socket connect failed")
+            LOGGER.exception("socket connect failed")
             raise SocketConnectionError("socket connect failed")
 
     def read(self, ignore: bool = False) -> Optional[Message]:
-        if self.received_buffer:
+        if self._received_buffer:
             return self.read_from_buffer(ignore)
 
-        message_raw = self.socket.recv(self.buffer_size)
-        message_decoded = message_raw.decode("utf-8")
-        message = message_decoded.rstrip(self.message_end)
-        messages = message.split(self.message_end)
+        message_raw = self._socket.recv(BUFFER_SIZE)
+        message_decoded = message_raw.decode()
+        message = message_decoded.rstrip(MESSAGE_END)
+        messages = message.split(MESSAGE_END)
 
-        self.received_buffer.extend(messages)
+        self._received_buffer.extend(messages)
 
         return self.read_from_buffer(ignore)
 
     def read_from_buffer(self, ignore: bool = False) -> Optional[Message]:
-        message = self.received_buffer.pop(0)
+        message = self._received_buffer.pop(0)
         if ignore:
-            self.logger.debug("ignoring message: {}".format(message))
+            LOGGER.debug("ignoring message: {}".format(message))
             return None
 
-        self.logger.debug("read message: {}".format(message))
+        LOGGER.debug("read message: {}".format(message))
         return Message.build_from_string(message)
 
     def write(self, message: Message) -> None:
-        self.logger.debug("write message: {}".format(message))
-        self.last_message = message
-        message_string = str(message) + self.message_end
-        self.socket.send(str.encode(message_string))
+        LOGGER.debug("write message: {}".format(message))
+        message_string = str(message) + MESSAGE_END
+        self._socket.send(str.encode(message_string))

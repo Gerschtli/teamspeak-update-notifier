@@ -17,7 +17,7 @@ class Message:
                  command: str,
                  value_params: Optional[Dict[str, str]] = None,
                  key_params: Optional[List[str]] = None) -> None:
-        self._command = command
+        self.command = command
         self._value_params = {} if value_params is None else value_params
         self._key_params = [] if key_params is None else key_params
 
@@ -41,9 +41,6 @@ class Message:
                 value_params[key] = Message._decode(splitted[1])
 
         return Message(command, value_params, key_params)
-
-    def command(self) -> str:
-        return self._command
 
     def param(self, key: str) -> Optional[str]:
         return self._value_params.get(key)
@@ -69,6 +66,6 @@ class Message:
             for key, value in self._value_params.items()
         ]
 
-        params = [self._command] + self._key_params + encoded_params
+        params = [self.command] + self._key_params + encoded_params
 
         return Message._delimeter_param.join(params)
