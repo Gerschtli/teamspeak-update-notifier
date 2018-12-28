@@ -3,29 +3,16 @@ cache: pip
 sudo: false
 
 python:
-  - 3.5
   - 3.6
 
 install:
-  - |
-    if [[ "${TRAVIS_PYTHON_VERSION}" == "3.6" ]]; then
-      pip install codecov
-      pip install coverage
-    fi
+  - pip install codecov coverage
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
 
 script:
   - ./ci/lint.sh
-  - |
-    if [[ "${TRAVIS_PYTHON_VERSION}" == "3.6" ]]; then
-      coverage run setup.py test
-    else
-      python setup.py test
-    fi
+  - coverage run setup.py test
 
 after_success:
-  - |
-    if [[ "${TRAVIS_PYTHON_VERSION}" == "3.6" ]]; then
-      codecov
-    fi
+  - codecov
