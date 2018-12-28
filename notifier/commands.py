@@ -1,4 +1,4 @@
-from .app import CONFIG
+from . import app
 from .message import Message
 
 
@@ -7,8 +7,8 @@ class Login(Message):
         super().__init__(
             "login",
             {
-                "client_login_name": CONFIG.get("ts3", "username"),
-                "client_login_password": CONFIG.get("ts3", "password"),
+                "client_login_name": app.CONFIG.get("ts3", "username"),
+                "client_login_password": app.CONFIG.get("ts3", "password"),
             },
         )
 
@@ -42,7 +42,7 @@ class Use(Message):
     def __init__(self) -> None:
         super().__init__(
             "use",
-            {"sid": CONFIG.get("ts3", "server_id")},
+            {"sid": app.CONFIG.get("ts3", "server_id")},
         )
 
 

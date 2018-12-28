@@ -1,7 +1,7 @@
 import signal
 import sys
 
-from .app import LOGGER
+from . import app
 from .client import Client
 from . import commands
 from .errors import Error, MessageError, SigTermError
@@ -34,10 +34,10 @@ def main() -> None:
     try:
         _start()
     except KeyboardInterrupt:
-        LOGGER.info("exit cause: keyboard interrupt")
+        app.LOGGER.info("exit cause: keyboard interrupt")
         sys.exit(SigTermError.exit_code)
     except Error as error:
-        LOGGER.info("exit cause: {}".format(error))
+        app.LOGGER.info("exit cause: {}".format(error))
         sys.exit(error.exit_code)
 
 

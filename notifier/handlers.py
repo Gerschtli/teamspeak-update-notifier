@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import NamedTuple, Optional
 
-from .app import CONFIG, LOGGER
+from . import app
 from .errors import MessageError, ServerDisconnectError
 from .message import Message
 from .socket import Socket
@@ -30,10 +30,11 @@ class ClientEnter(Handler):
         servergroups = message.param("client_servergroups")
         nickname = message.param("client_nickname")
 
-        LOGGER.debug("client {} (id: {}) with server group {} entered".format(
-            nickname, client_id, servergroups))
+        app.LOGGER.debug(
+            "client {} (id: {}) with server group {} entered".format(
+                nickname, client_id, servergroups))
 
-        if (servergroups != CONFIG.get("notifier", "server_group_id")
+        if (servergroups != app.CONFIG.get("notifier", "server_group_id")
                 or client_id is None or nickname is None
                 or not version_manager.need_update()):
             return

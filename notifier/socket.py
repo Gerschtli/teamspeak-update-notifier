@@ -1,7 +1,7 @@
 from typing import Optional, List
 import socket
 
-from .app import CONFIG, LOGGER
+from . import app
 from .errors import SocketConnectionError
 from .message import Message
 
@@ -16,16 +16,16 @@ class Socket:
 
     def close(self) -> None:
         self._socket.close()
-        LOGGER.info("socket closed")
+        app.LOGGER.info("socket closed")
 
     def connect(self) -> None:
         try:
-            host = CONFIG.get("ts3", "host")
-            port = int(CONFIG.get("ts3", "port"))
+            host = app.CONFIG.get("ts3", "host")
+            port = int(app.CONFIG.get("ts3", "port"))
             self._socket.connect((host, port))
-            LOGGER.info("socket connected")
+            app.LOGGER.info("socket connected")
         except socket.error:
-            LOGGER.exception("socket connect failed")
+            app.LOGGER.exception("socket connect failed")
             raise SocketConnectionError("socket connect failed")
 
     def read(self, ignore: bool = False) -> Optional[Message]:
@@ -44,13 +44,13 @@ class Socket:
     def read_from_buffer(self, ignore: bool = False) -> Optional[Message]:
         message = self._received_buffer.pop(0)
         if ignore:
-            LOGGER.debug("ignoring message: {}".format(message))
+            app.LOGGER.debug("ignoring message: {}".format(message))
             return None
 
-        LOGGER.debug("read message: {}".format(message))
+        app.LOGGER.debug("read message: {}".format(message))
         return Message.build_from_string(message)
 
     def write(self, message: Message) -> None:
-        LOGGER.debug("write message: {}".format(message))
+        app.LOGGER.debug("write message: {}".format(message))
         message_string = str(message) + MESSAGE_END
         self._socket.send(str.encode(message_string))

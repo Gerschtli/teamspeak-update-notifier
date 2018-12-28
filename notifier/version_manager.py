@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup  # type: ignore
 import requests
 
-from .app import CONFIG, LOGGER
+from . import app
 from .commands import SendMessage
 from .socket import Socket
 
@@ -10,12 +10,13 @@ DOWNLOAD_LINK: str = ("https://www.teamspeak.de/download/"
 
 
 def need_update() -> bool:
-    current_version = CONFIG.get("notifier", "current_version")
+    current_version = app.CONFIG.get("notifier", "current_version")
     recent_version = _recent_version()
     result = current_version != recent_version
 
-    LOGGER.debug("current version {} - recent version {} - update {}".format(
-        current_version, recent_version, result))
+    app.LOGGER.debug(
+        "current version {} - recent version {} - update {}".format(
+            current_version, recent_version, result))
 
     return result
 
@@ -26,7 +27,7 @@ def send_message(socket: Socket, client_id: str, nickname: str) -> None:
 
     socket.write(SendMessage(client_id, message))
 
-    LOGGER.info("send message to client {}".format(nickname))
+    app.LOGGER.info("send message to client {}".format(nickname))
 
 
 def _recent_version() -> str:
