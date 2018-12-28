@@ -1,16 +1,16 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from .errors import EmptyMessageError
 
 
 class Message:
-    _delimeter_param = " "
-    _delimeter_kv = "="
-    _encode_matrix = [
-        ["\\", "\\\\"],
-        ["/", r"\/"],
-        [" ", r"\s"],
-        ["|", r"\p"],
+    _delimeter_param: str = " "
+    _delimeter_kv: str = "="
+    _encode_matrix: List[Tuple[str, str]] = [
+        ("\\", "\\\\"),
+        ("/", r"\/"),
+        (" ", r"\s"),
+        ("|", r"\p"),
     ]
 
     def __init__(self,

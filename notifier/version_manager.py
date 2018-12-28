@@ -1,11 +1,17 @@
+from logging import Logger
+from typing import Callable, Optional
 import time
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup  # type: ignore
 import requests
 
+from .commands import CommandFactory
+from .socket import Socket
 
-def cache_version(original_function):
-    def new_function(self):
+
+def cache_version(original_function: Callable[['VersionManager'], str]
+                  ) -> Callable[['VersionManager'], str]:
+    def new_function(self: 'VersionManager') -> str:
         current_timestamp = time.time()
         if (self.version is not None and self.last_updated is not None
                 and self.last_updated > current_timestamp - self.cache_time):
@@ -24,18 +30,19 @@ def cache_version(original_function):
 
 
 class VersionManager:
-    cache_time = 86400  # one day in seconds
-    last_updated = None
-    link = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
-    version = None
+    cache_time: int = 86400  # one day in seconds
+    last_updated: Optional[float] = None
+    link: str = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
+    version: Optional[str] = None
 
-    def __init__(self, command_factory, logger, socket, current_version):
+    def __init__(self, command_factory: CommandFactory, logger: Logger,
+                 socket: Socket, current_version: str) -> None:
         self.command_factory = command_factory
         self.logger = logger
         self.socket = socket
         self.current_version = current_version
 
-    def need_update(self):
+    def need_update(self) -> bool:
         recent_version = self.recent_version()
         result = self.current_version != self.recent_version()
 
@@ -45,7 +52,7 @@ class VersionManager:
 
         return result
 
-    def send_message(self, client_id, nickname):
+    def send_message(self, client_id: str, nickname: str) -> None:
         message = "Please update your server to version {}!".format(
             self.recent_version())
 
@@ -55,10 +62,11 @@ class VersionManager:
         self.logger.info("send message to client {}".format(nickname))
 
     @cache_version
-    def recent_version(self):
+    def recent_version(self) -> str:
         data = requests.get(self.link)
 
-        soup = BeautifulSoup(data.text, "html.parser")
-        version = soup.select("[itemprop=softwareVersion]")[0].text
+        soup = BeautifulSoup(data.text, "html.parser")  # type: ignore
+        element = soup.select("[itemprop=softwareVersion]")  # type: ignore
+        version: str = element[0].text  # type: ignore
 
         return version
