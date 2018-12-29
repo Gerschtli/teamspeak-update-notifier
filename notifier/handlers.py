@@ -28,11 +28,9 @@ class ClientEnter(Handler):
         servergroups = message.param("client_servergroups")
         nickname = message.param("client_nickname")
 
-        app.LOGGER.debug("client %s (id: %s) with server group %s entered",
-                         nickname, client_id, servergroups)
+        app.LOGGER.debug("client %s (id: %s) with server group %s entered", nickname, client_id, servergroups)
 
-        if (servergroups != app.CONFIG.get("notifier", "server_group_id")
-                or client_id is None or nickname is None
+        if (servergroups != app.CONFIG.get("notifier", "server_group_id") or client_id is None or nickname is None
                 or not version_manager.need_update()):
             return
 

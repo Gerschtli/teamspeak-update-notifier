@@ -9,13 +9,9 @@ with open("requirements.txt", "rb") as f:
 setup(
     name="teamspeak-update-notifier",
     packages=["notifier"],
-    entry_points={
-        "console_scripts":
-        ["teamspeak-update-notifier = notifier.__main__:main"]
-    },
+    entry_points={"console_scripts": ["teamspeak-update-notifier = notifier.__main__:main"]},
     version="1.3.1",
-    description=("Sends update notifications to server admins for teamspeak "
-                 "server."),
+    description="Sends update notifications to server admins for teamspeak server.",
     long_description=long_descr,
     author="Tobias Happ",
     author_email="tobias.happ@gmx.de",

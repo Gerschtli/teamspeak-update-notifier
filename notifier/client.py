@@ -48,12 +48,9 @@ class Client:
 
         return self
 
-    def __exit__(self, exception_type: Optional[Type[BaseException]],
-                 exception_value: Optional[BaseException],
+    def __exit__(self, exception_type: Optional[Type[BaseException]], exception_value: Optional[BaseException],
                  traceback: Optional[TracebackType]) -> bool:
-        connection_errors = [
-            errors.SocketConnectionError, errors.ServerDisconnectError
-        ]
+        connection_errors = [errors.SocketConnectionError, errors.ServerDisconnectError]
         if exception_type not in connection_errors:
             self.execute(commands.Quit())
 

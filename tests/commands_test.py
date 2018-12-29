@@ -13,18 +13,14 @@ class CommandsTest(unittest.TestCase):
 
         message = commands.Login()
 
-        config.get.assert_has_calls(
-            [call("ts3", "username"),
-             call("ts3", "password")])
+        config.get.assert_has_calls([call("ts3", "username"), call("ts3", "password")])
         self.assertEqual(config.get.call_count, 2)
 
         self.assertIsInstance(message, commands.Login)
         self.assertEqual(message.command, "login")
         self.assertEqual(message.param("client_login_name"), "username")
         self.assertEqual(message.param("client_login_password"), "password")
-        self.assertEqual(
-            str(message),
-            "login client_login_name=username client_login_password=password")
+        self.assertEqual(str(message), "login client_login_name=username client_login_password=password")
 
     def test_notify_register(self) -> None:
         message = commands.NotifyRegister()
@@ -49,8 +45,7 @@ class CommandsTest(unittest.TestCase):
         self.assertEqual(message.param("targetmode"), "1")
         self.assertEqual(message.param("target"), "123")
         self.assertEqual(message.param("msg"), "text")
-        self.assertEqual(
-            str(message), "sendtextmessage targetmode=1 target=123 msg=text")
+        self.assertEqual(str(message), "sendtextmessage targetmode=1 target=123 msg=text")
 
     def test_use(self) -> None:
         config = Mock(spec_set=configparser.ConfigParser)

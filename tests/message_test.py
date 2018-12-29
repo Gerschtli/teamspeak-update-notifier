@@ -6,8 +6,7 @@ from notifier.message import Message
 
 class MessageTest(unittest.TestCase):
     def test_build_from_string(self) -> None:
-        message = Message.build_from_string(
-            "login hello user=hans password=georg")
+        message = Message.build_from_string("login hello user=hans password=georg")
         self.assertEqual(message.command, "login")
         self.assertEqual(message.param("user"), "hans")
         self.assertEqual(message.param("password"), "georg")
@@ -36,10 +35,7 @@ class MessageTest(unittest.TestCase):
         self.assertEqual(str(exception), "empty message received")
 
     def test_init(self) -> None:
-        message = Message("login", {
-            "user": "hans",
-            "password": "georg"
-        }, ["hello"])
+        message = Message("login", {"user": "hans", "password": "georg"}, ["hello"])
         self.assertEqual(message.command, "login")
         self.assertEqual(message.param("user"), "hans")
         self.assertEqual(message.param("password"), "georg")

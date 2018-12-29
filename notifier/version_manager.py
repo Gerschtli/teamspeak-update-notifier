@@ -4,8 +4,7 @@ import requests
 from . import app, commands
 from .socket import Socket
 
-DOWNLOAD_LINK: str = ("https://www.teamspeak.de/download/"
-                      "teamspeak-3-amd64-server-linux/")
+DOWNLOAD_LINK: str = ("https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/")
 
 
 def need_update() -> bool:
@@ -13,15 +12,13 @@ def need_update() -> bool:
     recent_version = _recent_version()
     result = current_version != recent_version
 
-    app.LOGGER.debug("current version %s - recent version %s - update %s",
-                     current_version, recent_version, result)
+    app.LOGGER.debug("current version %s - recent version %s - update %s", current_version, recent_version, result)
 
     return result
 
 
 def send_message(socket: Socket, client_id: str, nickname: str) -> None:
-    message = "Please update your server to version {}!".format(
-        _recent_version())
+    message = "Please update your server to version {}!".format(_recent_version())
 
     socket.write(commands.SendMessage(client_id, message))
 
