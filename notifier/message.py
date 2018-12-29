@@ -22,7 +22,7 @@ class Message:
         self._key_params = [] if key_params is None else key_params
 
     @staticmethod
-    def build_from_string(message: str) -> 'Message':
+    def build_from_string(message: str) -> "Message":
         if message == "":
             raise errors.EmptyMessageError("empty message received")
 
