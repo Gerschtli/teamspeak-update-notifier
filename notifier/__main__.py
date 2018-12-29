@@ -1,11 +1,8 @@
 import signal
 import sys
 
-from . import app
+from . import app, commands, errors, handlers
 from .client import Client
-from . import commands
-from .errors import Error, MessageError, SigTermError
-from . import handlers
 
 
 def _start() -> None:
@@ -17,7 +14,7 @@ def _start() -> None:
 
         whoami = client.execute(commands.Whoami())
         if whoami is None or whoami.client_id is None:
-            raise MessageError("whoami failed")
+            raise errors.MessageError("whoami failed")
 
         client.execute(commands.NotifyRegister())
 
@@ -27,7 +24,7 @@ def _start() -> None:
 
 
 def _sigterm_handler(_signo, _stack_frame):  # type: ignore
-    raise SigTermError("process killed via SIGTERM")
+    raise errors.SigTermError("process killed via SIGTERM")
 
 
 def main() -> None:
@@ -35,8 +32,8 @@ def main() -> None:
         _start()
     except KeyboardInterrupt:
         app.LOGGER.info("exit cause: keyboard interrupt")
-        sys.exit(SigTermError.exit_code)
-    except Error as error:
+        sys.exit(errors.SigTermError.exit_code)
+    except errors.Error as error:
         app.LOGGER.info("exit cause: %s", error)
         sys.exit(error.exit_code)
 

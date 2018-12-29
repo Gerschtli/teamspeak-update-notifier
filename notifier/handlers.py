@@ -1,11 +1,9 @@
 from abc import abstractmethod
 from typing import NamedTuple, Optional
 
-from . import app
-from .errors import MessageError, ServerDisconnectError
+from . import app, errors, version_manager
 from .message import Message
 from .socket import Socket
-from . import version_manager
 
 
 class Handler:
@@ -52,11 +50,11 @@ class ClientLeft(Handler):
     def execute(self, socket: Socket, message: Message) -> None:
         # check for server down
         if message.param("reasonid") == "11":
-            raise ServerDisconnectError("server shutdown received")
+            raise errors.ServerDisconnectError("server shutdown received")
 
         # check for client disconnect
         if message.param("clid") == self._client_id:
-            raise ServerDisconnectError("client disconnected")
+            raise errors.ServerDisconnectError("client disconnected")
 
 
 class WhoamiResponse(NamedTuple):
@@ -67,7 +65,7 @@ def handle_error(message: Message) -> None:
     if message.command == "error" and message.param("msg") == "ok":
         return
 
-    raise MessageError("error last command")
+    raise errors.MessageError("error last command")
 
 
 def handle_whoami(message: Message) -> WhoamiResponse:

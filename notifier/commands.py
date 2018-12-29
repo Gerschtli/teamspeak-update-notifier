@@ -1,8 +1,7 @@
-from . import app
-from .message import Message
+from . import app, message
 
 
-class Login(Message):
+class Login(message.Message):
     def __init__(self) -> None:
         super().__init__(
             "login",
@@ -13,7 +12,7 @@ class Login(Message):
         )
 
 
-class NotifyRegister(Message):
+class NotifyRegister(message.Message):
     def __init__(self) -> None:
         super().__init__(
             "servernotifyregister",
@@ -21,12 +20,12 @@ class NotifyRegister(Message):
         )
 
 
-class Quit(Message):
+class Quit(message.Message):
     def __init__(self) -> None:
         super().__init__("quit")
 
 
-class SendMessage(Message):
+class SendMessage(message.Message):
     def __init__(self, client_id: str, message: str) -> None:
         super().__init__(
             "sendtextmessage",
@@ -38,7 +37,7 @@ class SendMessage(Message):
         )
 
 
-class Use(Message):
+class Use(message.Message):
     def __init__(self) -> None:
         super().__init__(
             "use",
@@ -46,6 +45,6 @@ class Use(Message):
         )
 
 
-class Whoami(Message):
+class Whoami(message.Message):
     def __init__(self) -> None:
         super().__init__("whoami")

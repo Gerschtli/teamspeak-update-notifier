@@ -1,6 +1,6 @@
 import unittest
 
-from notifier.errors import EmptyMessageError
+from notifier import errors
 from notifier.message import Message
 
 
@@ -30,7 +30,7 @@ class MessageTest(unittest.TestCase):
 
         try:
             Message.build_from_string("")
-        except EmptyMessageError as ex:
+        except errors.EmptyMessageError as ex:
             exception = ex
 
         self.assertEqual(str(exception), "empty message received")

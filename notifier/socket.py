@@ -1,8 +1,7 @@
-from typing import Optional, List
 import socket
+from typing import Optional, List
 
-from . import app
-from .errors import SocketConnectionError
+from . import app, errors
 from .message import Message
 
 BUFFER_SIZE: int = 2048
@@ -26,7 +25,7 @@ class Socket:
             app.LOGGER.info("socket connected")
         except socket.error:
             app.LOGGER.exception("socket connect failed")
-            raise SocketConnectionError("socket connect failed")
+            raise errors.SocketConnectionError("socket connect failed")
 
     def read(self, ignore: bool = False) -> Optional[Message]:
         if self._received_buffer:

@@ -1,26 +1,27 @@
 import argparse
-from configparser import ConfigParser
+import configparser
 import logging
 import sys
 
-LOGGER_NAME = "notifier"
+LOGGER_NAME: str = "notifier"
 
 
-def _setup_config() -> ConfigParser:
+def _setup_config() -> configparser.ConfigParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("config", help="Path to config file.")
     config_path: str = parser.parse_args().config
 
-    config = ConfigParser()
+    config = configparser.ConfigParser()
     config.read(config_path)
 
     return config
 
 
 def _setup_logger() -> logging.Logger:
+    formatter = logging.Formatter("[{levelname}] {message}", style="{")
+
     handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(
-        logging.Formatter("[{levelname}] {message}", style="{"))
+    handler.setFormatter(formatter)
     # handler.setLevel(logging.INFO)
 
     logger = logging.Logger(name=LOGGER_NAME)

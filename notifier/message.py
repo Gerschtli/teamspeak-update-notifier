@@ -1,6 +1,6 @@
 from typing import Dict, List, Optional, Tuple
 
-from .errors import EmptyMessageError
+from . import errors
 
 
 class Message:
@@ -24,7 +24,7 @@ class Message:
     @staticmethod
     def build_from_string(message: str) -> 'Message':
         if message == "":
-            raise EmptyMessageError("empty message received")
+            raise errors.EmptyMessageError("empty message received")
 
         message_parts = message.split(Message._delimeter_param)
         command = message_parts.pop(0)
