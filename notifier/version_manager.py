@@ -31,8 +31,8 @@ def send_message(socket: Socket, client_id: str, nickname: str) -> None:
 def _recent_version() -> str:
     data = requests.get(DOWNLOAD_LINK)
 
-    soup = bs4.BeautifulSoup(data.text, "html.parser")  # type: ignore
-    element = soup.select("[itemprop=softwareVersion]")  # type: ignore
-    version: str = element[0].text  # type: ignore
+    soup = bs4.BeautifulSoup(data.text, "html.parser")
+    element = soup.select("[itemprop=softwareVersion]")
+    version: str = element[0].text
 
     return version

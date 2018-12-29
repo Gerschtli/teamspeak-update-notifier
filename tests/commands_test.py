@@ -5,19 +5,18 @@ from unittest.mock import call, Mock
 from notifier import app, commands
 
 
-class CommandFactoryTest(unittest.TestCase):
+class CommandsTest(unittest.TestCase):
     def test_login(self) -> None:
-        config = Mock(spec_set=configparser.ConfigParser)  # type: ignore
-        config.get.side_effect = ["username", "password"]  # type: ignore
+        config = Mock(spec_set=configparser.ConfigParser)
+        config.get.side_effect = ["username", "password"]
         app.CONFIG = config
 
         message = commands.Login()
 
-        config.get.assert_has_calls([  # type: ignore
-            call("ts3", "username"),  # type: ignore
-            call("ts3", "password")  # type: ignore
-        ])
-        self.assertEqual(config.get.call_count, 2)  # type: ignore
+        config.get.assert_has_calls(
+            [call("ts3", "username"),
+             call("ts3", "password")])
+        self.assertEqual(config.get.call_count, 2)
 
         self.assertIsInstance(message, commands.Login)
         self.assertEqual(message.command, "login")
@@ -54,14 +53,14 @@ class CommandFactoryTest(unittest.TestCase):
             str(message), "sendtextmessage targetmode=1 target=123 msg=text")
 
     def test_use(self) -> None:
-        config = Mock(spec_set=configparser.ConfigParser)  # type: ignore
+        config = Mock(spec_set=configparser.ConfigParser)
         app.CONFIG = config
-        config.get.return_value = "654"  # type: ignore
+        config.get.return_value = "654"
 
         message = commands.Use()
 
-        config.get.assert_called_with("ts3", "server_id")  # type: ignore
-        self.assertEqual(config.get.call_count, 1)  # type: ignore
+        config.get.assert_called_with("ts3", "server_id")
+        self.assertEqual(config.get.call_count, 1)
 
         self.assertIsInstance(message, commands.Use)
         self.assertEqual(message.command, "use")

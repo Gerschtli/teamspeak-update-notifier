@@ -1,12 +1,13 @@
 import signal
 import sys
+import types
 
 from . import app, commands, errors, handlers
 from .client import Client
 
 
 def _start() -> None:
-    signal.signal(signal.SIGTERM, _sigterm_handler)  # type: ignore
+    signal.signal(signal.SIGTERM, _sigterm_handler)
 
     with Client() as client:
         client.execute(commands.Login())
@@ -23,7 +24,8 @@ def _start() -> None:
              handlers.ClientLeft(whoami.client_id)])
 
 
-def _sigterm_handler(_signo, _stack_frame):  # type: ignore
+def _sigterm_handler(_signo: signal.Signals,
+                     _stack_frame: types.FrameType) -> None:
     raise errors.SigTermError("process killed via SIGTERM")
 
 
