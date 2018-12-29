@@ -27,13 +27,13 @@ class Client:
 
         return result
 
-    def listen(self, handlers: List[handlers.Handler]) -> None:
+    def listen(self, handlers_list: List[handlers.Handler]) -> None:
         while True:
             message = self._socket.read()
             if message is None:
                 continue
 
-            for handler in handlers:
+            for handler in handlers_list:
                 if handler.match(message):
                     handler.execute(self._socket, message)
                     break

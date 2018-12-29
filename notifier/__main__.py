@@ -24,6 +24,7 @@ def _start() -> None:
              handlers.ClientLeft(whoami.client_id)])
 
 
+# pylint: disable=no-member
 def _sigterm_handler(_signo: signal.Signals,
                      _stack_frame: types.FrameType) -> None:
     raise errors.SigTermError("process killed via SIGTERM")
