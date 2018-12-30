@@ -6,7 +6,7 @@ import sys
 LOGGER_NAME: str = "notifier"
 
 
-def _setup_config() -> configparser.ConfigParser:
+def build_config() -> configparser.ConfigParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("config", help="Path to config file.")
     config_path: str = parser.parse_args().config
@@ -30,5 +30,4 @@ def _setup_logger() -> logging.Logger:
     return logger
 
 
-CONFIG = _setup_config()
 LOGGER = _setup_logger()

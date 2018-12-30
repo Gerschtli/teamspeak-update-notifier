@@ -18,20 +18,23 @@ class Handler:
 
 
 class ClientEnter(Handler):
+    def __init__(self, server_group_id: str, current_version: str) -> None:
+        self._server_group_id = server_group_id
+        self._current_version = current_version
+
     @staticmethod
     def match(message: Message) -> bool:
         return message.command == "notifycliententerview"
 
-    @staticmethod
-    def execute(socket: Socket, message: Message) -> None:
+    def execute(self, socket: Socket, message: Message) -> None:
         client_id = message.param("clid")
         servergroups = message.param("client_servergroups")
         nickname = message.param("client_nickname")
 
         app.LOGGER.debug("client %s (id: %s) with server group %s entered", nickname, client_id, servergroups)
 
-        if (servergroups != app.CONFIG.get("notifier", "server_group_id") or client_id is None or nickname is None
-                or not version_manager.need_update()):
+        if (servergroups != self._server_group_id or client_id is None or nickname is None
+                or not version_manager.need_update(self._current_version)):
             return
 
         version_manager.send_message(socket, client_id, nickname)

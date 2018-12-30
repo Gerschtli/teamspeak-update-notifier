@@ -1,14 +1,13 @@
-from . import app
 from .message import Message
 
 
 class Login(Message):
-    def __init__(self) -> None:
+    def __init__(self, username: str, password: str) -> None:
         super().__init__(
             "login",
             {
-                "client_login_name": app.CONFIG.get("ts3", "username"),
-                "client_login_password": app.CONFIG.get("ts3", "password"),
+                "client_login_name": username,
+                "client_login_password": password,
             },
         )
 
@@ -39,10 +38,10 @@ class SendMessage(Message):
 
 
 class Use(Message):
-    def __init__(self) -> None:
+    def __init__(self, server_id: str) -> None:
         super().__init__(
             "use",
-            {"sid": app.CONFIG.get("ts3", "server_id")},
+            {"sid": server_id},
         )
 
 

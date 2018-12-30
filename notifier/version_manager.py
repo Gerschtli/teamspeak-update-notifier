@@ -7,8 +7,7 @@ from .socket import Socket
 DOWNLOAD_LINK: str = ("https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/")
 
 
-def need_update() -> bool:
-    current_version = app.CONFIG.get("notifier", "current_version")
+def need_update(current_version: str) -> bool:
     recent_version = _recent_version()
     result = current_version != recent_version
 

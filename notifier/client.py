@@ -1,13 +1,14 @@
 from types import TracebackType
 from typing import List, Optional, Type
 
-from . import commands, errors, handlers, socket
+from . import commands, errors, handlers
 from .message import Message
+from .socket import Socket
 
 
 class Client:
-    def __init__(self) -> None:
-        self._socket = socket.Socket()
+    def __init__(self, socket: Socket) -> None:
+        self._socket = socket
 
     def execute(self, command: Message) -> Optional[handlers.WhoamiResponse]:
         self._socket.write(command)

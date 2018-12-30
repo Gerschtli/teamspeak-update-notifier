@@ -18,8 +18,7 @@ class AppTest(unittest.TestCase):
 
         config = mock_configparser.return_value
 
-        # pylint: disable=protected-access
-        result = app._setup_config()
+        result = app.build_config()
 
         mock_argparser.assert_called_once_with()
         argparser.add_argument.assert_called_once_with("config", help="Path to config file.")
@@ -54,5 +53,4 @@ class AppTest(unittest.TestCase):
 
     def test_constants(self) -> None:
         self.assertEqual(app.LOGGER_NAME, "notifier")
-        self.assertIsInstance(app.CONFIG, configparser.ConfigParser)
         self.assertIsInstance(app.LOGGER, logging.Logger)

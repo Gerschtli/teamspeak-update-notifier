@@ -9,7 +9,9 @@ MESSAGE_END: str = "\n\r"
 
 
 class Socket:
-    def __init__(self) -> None:
+    def __init__(self, host: str, port: int) -> None:
+        self._host = host
+        self._port = port
         self._received_buffer: List[str] = []
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -19,9 +21,7 @@ class Socket:
 
     def connect(self) -> None:
         try:
-            host = app.CONFIG.get("ts3", "host")
-            port = int(app.CONFIG.get("ts3", "port"))
-            self._socket.connect((host, port))
+            self._socket.connect((self._host, self._port))
             app.LOGGER.info("socket connected")
         except socket.error:
             app.LOGGER.exception("socket connect failed")

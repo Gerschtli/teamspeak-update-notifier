@@ -1,20 +1,11 @@
-import configparser
 import unittest
-from unittest.mock import call, Mock
 
-from notifier import app, commands
+from notifier import commands
 
 
 class CommandsTest(unittest.TestCase):
     def test_login(self) -> None:
-        config = Mock(spec_set=configparser.ConfigParser)
-        config.get.side_effect = ["username", "password"]
-        app.CONFIG = config
-
-        message = commands.Login()
-
-        config.get.assert_has_calls([call("ts3", "username"), call("ts3", "password")])
-        self.assertEqual(config.get.call_count, 2)
+        message = commands.Login("username", "password")
 
         self.assertIsInstance(message, commands.Login)
         self.assertEqual(message.command, "login")
@@ -48,14 +39,7 @@ class CommandsTest(unittest.TestCase):
         self.assertEqual(str(message), "sendtextmessage targetmode=1 target=123 msg=text")
 
     def test_use(self) -> None:
-        config = Mock(spec_set=configparser.ConfigParser)
-        app.CONFIG = config
-        config.get.return_value = "654"
-
-        message = commands.Use()
-
-        config.get.assert_called_with("ts3", "server_id")
-        self.assertEqual(config.get.call_count, 1)
+        message = commands.Use("654")
 
         self.assertIsInstance(message, commands.Use)
         self.assertEqual(message.command, "use")
