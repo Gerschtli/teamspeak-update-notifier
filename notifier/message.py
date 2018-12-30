@@ -61,7 +61,8 @@ class Message:
 
     def __repr__(self) -> str:
         encoded_params = [
-            "".join([key, Message._delimeter_kv, Message._encode(value)]) for key, value in self._value_params.items()
+            "".join([key, Message._delimeter_kv, Message._encode(value)])
+            for key, value in self._value_params.items()
         ]
 
         params = [self.command] + self._key_params + encoded_params

@@ -34,7 +34,8 @@ class ClientEnter(Handler):
         servergroups = message.param("client_servergroups")
         nickname = message.param("client_nickname")
 
-        logger.debug("client %s (id: %s) with server group %s entered", nickname, client_id, servergroups)
+        logger.debug("client %s (id: %s) with server group %s entered", nickname, client_id,
+                     servergroups)
 
         if (servergroups != self._server_group_id or client_id is None or nickname is None
                 or not version_manager.need_update(self._current_version)):

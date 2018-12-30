@@ -15,7 +15,8 @@ def need_update(current_version: str) -> bool:
     recent_version = _recent_version()
     result = current_version != recent_version
 
-    logger.debug("current version %s - recent version %s - update %s", current_version, recent_version, result)
+    logger.debug("current version %s - recent version %s - update %s", current_version,
+                 recent_version, result)
 
     return result
 

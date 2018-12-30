@@ -33,6 +33,7 @@ def start(config: configparser.ConfigParser) -> None:
         client.execute(commands.NotifyRegister())
 
         client.listen([
-            handlers.ClientEnter(config_notifier["server_group_id"], config_notifier["current_version"]),
+            handlers.ClientEnter(config_notifier["server_group_id"],
+                                 config_notifier["current_version"]),
             handlers.ClientLeft(whoami.client_id)
         ])
