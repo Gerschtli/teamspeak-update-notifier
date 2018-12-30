@@ -6,6 +6,7 @@ with import <nixpkgs> { };
   buildInputs = old.buildInputs
     ++ (with python36Packages; [
       coverage
+      isort
       mypy
       pylama
       python-language-server
