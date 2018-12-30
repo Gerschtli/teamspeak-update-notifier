@@ -7,9 +7,7 @@ with import <nixpkgs> { };
     ++ (with python36Packages; [
       coverage
       mypy
-      pycodestyle
-      pyflakes
-      pylint
+      pylama
       python-language-server
     ]);
 
