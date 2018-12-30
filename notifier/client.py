@@ -24,7 +24,7 @@ class Client:
 
         message = self._socket.read()
         if message is not None:
-            handlers.handle_error(message)
+            handlers.handle_error(message, self._socket.last_command)
 
         return result
 

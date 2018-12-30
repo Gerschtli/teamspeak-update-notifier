@@ -14,6 +14,7 @@ class Socket:
         self._port = port
         self._received_buffer: List[str] = []
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.last_command: Optional[Message] = None
 
     def close(self) -> None:
         self._socket.close()
@@ -51,5 +52,6 @@ class Socket:
 
     def write(self, message: Message) -> None:
         app.LOGGER.debug("write message: %s", message)
+        self.last_command = message
         message_string = str(message) + MESSAGE_END
         self._socket.send(str.encode(message_string))

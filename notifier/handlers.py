@@ -62,11 +62,11 @@ class WhoamiResponse(NamedTuple):
     client_id: Optional[str]
 
 
-def handle_error(message: Message) -> None:
-    if message.command == "error" and message.param("msg") == "ok":
+def handle_error(message: Message, last_command: Optional[Message]) -> None:
+    if message is not None and message.command == "error" and message.param("msg") == "ok":
         return
 
-    raise errors.MessageError("error last command")
+    raise errors.MessageError("error last command: {}".format(last_command))
 
 
 def handle_whoami(message: Message) -> WhoamiResponse:
