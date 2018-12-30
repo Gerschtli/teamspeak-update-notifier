@@ -1,54 +1,56 @@
-import unittest
-
 from notifier import commands
 
 
-class CommandsTest(unittest.TestCase):
-    def test_login(self) -> None:
-        message = commands.Login("username", "password")
+def test_login() -> None:
+    message = commands.Login("username", "password")
 
-        self.assertIsInstance(message, commands.Login)
-        self.assertEqual(message.command, "login")
-        self.assertEqual(message.param("client_login_name"), "username")
-        self.assertEqual(message.param("client_login_password"), "password")
-        self.assertEqual(str(message), "login client_login_name=username client_login_password=password")
+    assert isinstance(message, commands.Login)
+    assert message.command == "login"
+    assert message.param("client_login_name") == "username"
+    assert message.param("client_login_password") == "password"
+    assert str(message) == "login client_login_name=username client_login_password=password"
 
-    def test_notify_register(self) -> None:
-        message = commands.NotifyRegister()
 
-        self.assertIsInstance(message, commands.NotifyRegister)
-        self.assertEqual(message.command, "servernotifyregister")
-        self.assertEqual(message.param("event"), "server")
-        self.assertEqual(str(message), "servernotifyregister event=server")
+def test_notify_register() -> None:
+    message = commands.NotifyRegister()
 
-    def test_quit(self) -> None:
-        message = commands.Quit()
+    assert isinstance(message, commands.NotifyRegister)
+    assert message.command == "servernotifyregister"
+    assert message.param("event") == "server"
+    assert str(message) == "servernotifyregister event=server"
 
-        self.assertIsInstance(message, commands.Quit)
-        self.assertEqual(message.command, "quit")
-        self.assertEqual(str(message), "quit")
 
-    def test_send_message(self) -> None:
-        message = commands.SendMessage("123", "text")
+def test_quit() -> None:
+    message = commands.Quit()
 
-        self.assertIsInstance(message, commands.SendMessage)
-        self.assertEqual(message.command, "sendtextmessage")
-        self.assertEqual(message.param("targetmode"), "1")
-        self.assertEqual(message.param("target"), "123")
-        self.assertEqual(message.param("msg"), "text")
-        self.assertEqual(str(message), "sendtextmessage targetmode=1 target=123 msg=text")
+    assert isinstance(message, commands.Quit)
+    assert message.command == "quit"
+    assert str(message) == "quit"
 
-    def test_use(self) -> None:
-        message = commands.Use("654")
 
-        self.assertIsInstance(message, commands.Use)
-        self.assertEqual(message.command, "use")
-        self.assertEqual(message.param("sid"), "654")
-        self.assertEqual(str(message), "use sid=654")
+def test_send_message() -> None:
+    message = commands.SendMessage("123", "text")
 
-    def test_whoami(self) -> None:
-        message = commands.Whoami()
+    assert isinstance(message, commands.SendMessage)
+    assert message.command == "sendtextmessage"
+    assert message.param("targetmode") == "1"
+    assert message.param("target") == "123"
+    assert message.param("msg") == "text"
+    assert str(message) == "sendtextmessage targetmode=1 target=123 msg=text"
 
-        self.assertIsInstance(message, commands.Whoami)
-        self.assertEqual(message.command, "whoami")
-        self.assertEqual(str(message), "whoami")
+
+def test_use() -> None:
+    message = commands.Use("654")
+
+    assert isinstance(message, commands.Use)
+    assert message.command == "use"
+    assert message.param("sid") == "654"
+    assert str(message) == "use sid=654"
+
+
+def test_whoami() -> None:
+    message = commands.Whoami()
+
+    assert isinstance(message, commands.Whoami)
+    assert message.command == "whoami"
+    assert str(message) == "whoami"

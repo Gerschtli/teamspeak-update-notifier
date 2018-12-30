@@ -10,4 +10,8 @@ python36.pkgs.buildPythonPackage rec {
     beautifulsoup4
     requests
   ];
+
+  checkInputs = with python36Packages; [
+    pytest
+  ];
 }

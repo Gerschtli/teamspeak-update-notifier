@@ -18,5 +18,6 @@ setup(
     url="https://github.com/Gerschtli/teamspeak-update-notifier",
     license="MIT",
     install_requires=requirements,
-    test_suite="tests",
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest"],
 )
