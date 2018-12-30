@@ -1,5 +1,5 @@
-from abc import abstractmethod
 import logging
+from abc import abstractmethod
 from typing import NamedTuple, Optional
 
 from . import errors, version_manager
