@@ -5,6 +5,7 @@ with import <nixpkgs> { };
 
   buildInputs = old.buildInputs
     ++ (with python36Packages; [
+      coverage
       mypy
       pycodestyle
       pyflakes
