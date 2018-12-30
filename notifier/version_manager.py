@@ -1,8 +1,12 @@
+import logging
+
 import bs4  # type: ignore
 import requests
 
-from . import app, commands
+from . import commands
 from .socket import Socket
+
+logger = logging.getLogger(__name__)
 
 DOWNLOAD_LINK: str = ("https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/")
 
@@ -11,7 +15,7 @@ def need_update(current_version: str) -> bool:
     recent_version = _recent_version()
     result = current_version != recent_version
 
-    app.LOGGER.debug("current version %s - recent version %s - update %s", current_version, recent_version, result)
+    logger.debug("current version %s - recent version %s - update %s", current_version, recent_version, result)
 
     return result
 
@@ -21,7 +25,7 @@ def send_message(socket: Socket, client_id: str, nickname: str) -> None:
 
     socket.write(commands.SendMessage(client_id, message))
 
-    app.LOGGER.info("send message to client %s", nickname)
+    logger.info("send message to client %s", nickname)
 
 
 def _recent_version() -> str:
