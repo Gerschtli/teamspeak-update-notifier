@@ -5,7 +5,7 @@ import types
 
 from . import app, errors
 
-logger = logging.getLogger(__name__)
+LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 # pylint: disable=no-member
@@ -13,8 +13,8 @@ def _sigterm_handler(_signo: signal.Signals, _stack_frame: types.FrameType) -> N
     raise errors.SigTermError("process killed via SIGTERM")
 
 
-def _handle_exception(exception: BaseException, exit_code: int) -> None:
-    logger.exception("exception occured in main, stopping application")
+def _handle_exception(exit_code: int) -> None:
+    LOGGER.exception("exception occured in main, stopping application")
     sys.exit(exit_code)
 
 
@@ -29,7 +29,7 @@ def main() -> None:
 
     try:
         app.start(config)
-    except KeyboardInterrupt as exception:
-        _handle_exception(exception, errors.SigTermError.exit_code)
+    except KeyboardInterrupt:
+        _handle_exception(errors.SigTermError.exit_code)
     except errors.Error as exception:
-        _handle_exception(exception, exception.exit_code)
+        _handle_exception(exception.exit_code)

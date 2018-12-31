@@ -6,7 +6,7 @@ from . import errors, version_manager
 from .message import Message
 from .socket import Socket
 
-logger = logging.getLogger(__name__)
+LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 class Handler:
@@ -34,7 +34,7 @@ class ClientEnter(Handler):
         servergroups = message.param("client_servergroups")
         nickname = message.param("client_nickname")
 
-        logger.debug("client %s (id: %s) with server group %s entered", nickname, client_id,
+        LOGGER.debug("client %s (id: %s) with server group %s entered", nickname, client_id,
                      servergroups)
 
         if (servergroups != self._server_group_id or client_id is None or nickname is None

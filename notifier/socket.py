@@ -5,9 +5,8 @@ from typing import List, Optional
 from . import errors
 from .message import Message
 
-logger = logging.getLogger(__name__)
-
 BUFFER_SIZE: int = 2048
+LOGGER: logging.Logger = logging.getLogger(__name__)
 MESSAGE_END: str = "\n\r"
 
 
@@ -21,14 +20,14 @@ class Socket:
 
     def close(self) -> None:
         self._socket.close()
-        logger.info("socket closed")
+        LOGGER.info("socket closed")
 
     def connect(self) -> None:
         try:
             self._socket.connect((self._host, self._port))
-            logger.info("socket connected")
+            LOGGER.info("socket connected")
         except socket.error:
-            logger.exception("socket connect failed")
+            LOGGER.exception("socket connect failed")
             raise errors.SocketConnectionError("socket connect failed")
 
     def read(self, ignore: bool = False) -> Optional[Message]:
@@ -47,14 +46,14 @@ class Socket:
     def read_from_buffer(self, ignore: bool = False) -> Optional[Message]:
         message = self._received_buffer.pop(0)
         if ignore:
-            logger.debug("ignoring message: %s", message)
+            LOGGER.debug("ignoring message: %s", message)
             return None
 
-        logger.debug("read message: %s", message)
+        LOGGER.debug("read message: %s", message)
         return Message.build_from_string(message)
 
     def write(self, message: Message) -> None:
-        logger.debug("write message: %s", message)
+        LOGGER.debug("write message: %s", message)
         self.last_command = message
         message_string = str(message) + MESSAGE_END
         self._socket.send(str.encode(message_string))
