@@ -13,5 +13,6 @@ python36.pkgs.buildPythonPackage rec {
 
   checkInputs = with python36Packages; [
     pytest
+    pytestrunner
   ];
 }
