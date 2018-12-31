@@ -8,7 +8,9 @@ with import <nixpkgs> { };
       coverage
       isort
       mypy
-      pylama
+      pycodestyle
+      pyflakes
+      pylint
       python-language-server
     ]);
 
