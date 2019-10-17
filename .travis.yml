@@ -25,9 +25,9 @@ matrix:
         - nix build --verbose
 
     - language: nix
-      name: nix build on nixos-18.09
+      name: nix build on nixos-19.09
       before_script:
-        - nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
+        - nix-channel --add https://nixos.org/channels/nixos-19.09 nixpkgs
         - nix-channel --update
         - nix eval nixpkgs.python36.version
       script:
