@@ -4,7 +4,7 @@ with import <nixpkgs> { };
   name = old.pname;
 
   buildInputs = old.buildInputs
-    ++ (with python36Packages; [
+    ++ (with python37Packages; [
       coverage
       isort
       mypy
