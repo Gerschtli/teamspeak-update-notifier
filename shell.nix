@@ -1,6 +1,6 @@
 with import <nixpkgs> { };
 
-(import ./.).overrideDerivation (old: {
+(import ./default.nix).overrideDerivation (old: {
   name = old.pname;
 
   buildInputs = old.buildInputs

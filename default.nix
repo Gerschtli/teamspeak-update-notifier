@@ -4,7 +4,9 @@ python37.pkgs.buildPythonPackage rec {
   pname = "teamspeak-update-notifier";
   version = "HEAD";
 
-  src = ./.;
+  src = builtins.filterSource
+    (path: type: type != "directory" || baseNameOf path != "teamspeak_update_notifier.egg-info")
+    ./.;
 
   propagatedBuildInputs = with python37Packages; [
     beautifulsoup4
