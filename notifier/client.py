@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from types import TracebackType
 from typing import List, Optional, Type
 
@@ -43,7 +45,7 @@ class Client:
         for _ in range(count):
             self._socket.read(ignore=True)
 
-    def __enter__(self) -> "Client":
+    def __enter__(self) -> Client:
         self._socket.connect()
         self._skip_messages(2)
 
