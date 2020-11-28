@@ -32,7 +32,7 @@ class Client:
 
     def listen(self, handlers_list: List[handlers.Handler]) -> None:
         while True:
-            message = self._socket.read(skip_empty=True)
+            message = self._socket.read()
             if message is None:
                 continue
 
