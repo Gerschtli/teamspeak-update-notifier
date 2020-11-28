@@ -4,7 +4,6 @@ from types import TracebackType
 from typing import List, Optional, Type
 
 from . import commands, errors, handlers
-from .message import Message
 from .socket import Socket
 
 
@@ -12,17 +11,16 @@ class Client:
     def __init__(self, socket: Socket) -> None:
         self._socket = socket
 
-    def execute(self, command: Message) -> Optional[handlers.WhoamiResponse]:
+    def execute(self, command: commands.Command) -> Optional[handlers.WhoamiResponse]:
         self._socket.write(command)
-
-        if isinstance(command, commands.SendMessage):
-            self._skip_messages(1)
 
         result = None
         if isinstance(command, commands.Whoami):
             message = self._socket.read()
             if message is not None:
                 result = handlers.handle_whoami(message)
+        elif command.has_response:
+            self._skip_messages(1)
 
         message = self._socket.read()
         if message is not None:

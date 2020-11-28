@@ -1,7 +1,19 @@
+from typing import Dict, Optional
+
 from .message import Message
 
 
-class Login(Message):
+class Command(Message):
+    def __init__(self,
+                 command: str,
+                 value_params: Optional[Dict[str, str]] = None,
+                 has_response: bool = False) -> None:
+        super().__init__(command, value_params)
+
+        self.has_response = has_response
+
+
+class Login(Command):
     def __init__(self, username: str, password: str) -> None:
         super().__init__(
             "login",
@@ -12,7 +24,7 @@ class Login(Message):
         )
 
 
-class NotifyRegister(Message):
+class NotifyRegister(Command):
     def __init__(self) -> None:
         super().__init__(
             "servernotifyregister",
@@ -20,12 +32,12 @@ class NotifyRegister(Message):
         )
 
 
-class Quit(Message):
+class Quit(Command):
     def __init__(self) -> None:
         super().__init__("quit")
 
 
-class SendMessage(Message):
+class SendMessage(Command):
     def __init__(self, client_id: str, message: str) -> None:
         super().__init__(
             "sendtextmessage",
@@ -34,10 +46,11 @@ class SendMessage(Message):
                 "target": client_id,
                 "msg": message,
             },
+            has_response=True,
         )
 
 
-class Use(Message):
+class Use(Command):
     def __init__(self, server_id: str) -> None:
         super().__init__(
             "use",
@@ -45,6 +58,6 @@ class Use(Message):
         )
 
 
-class Whoami(Message):
+class Whoami(Command):
     def __init__(self) -> None:
-        super().__init__("whoami")
+        super().__init__("whoami", has_response=True)
