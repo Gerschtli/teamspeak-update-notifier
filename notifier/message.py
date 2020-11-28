@@ -6,8 +6,8 @@ from . import errors
 
 
 class Message:
-    _delimeter_param: str = " "
-    _delimeter_kv: str = "="
+    _delimiter_param: str = " "
+    _delimiter_kv: str = "="
     _encode_matrix: List[Tuple[str, str]] = [
         ("\\", "\\\\"),
         ("/", r"\/"),
@@ -28,13 +28,13 @@ class Message:
         if message == "":
             raise errors.EmptyMessageError("empty message received")
 
-        message_parts = message.split(Message._delimeter_param)
+        message_parts = message.split(Message._delimiter_param)
         command = message_parts.pop(0)
 
         value_params = {}
         key_params = []
         for part in message_parts:
-            splitted = part.split(Message._delimeter_kv, 1)
+            splitted = part.split(Message._delimiter_kv, 1)
 
             key = splitted[0]
             if len(splitted) == 1:
@@ -63,10 +63,10 @@ class Message:
 
     def __repr__(self) -> str:
         encoded_params = [
-            "".join([key, Message._delimeter_kv, Message._encode(value)])
+            "".join([key, Message._delimiter_kv, Message._encode(value)])
             for key, value in self._value_params.items()
         ]
 
         params = [self.command] + self._key_params + encoded_params
 
-        return Message._delimeter_param.join(params)
+        return Message._delimiter_param.join(params)
