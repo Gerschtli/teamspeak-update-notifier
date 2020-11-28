@@ -1,18 +1,21 @@
 with import <nixpkgs> { };
 
-(import ./default.nix).overrideDerivation (old: {
-  name = old.pname;
+mkShell {
+  buildInputs = with python37Packages; [
+    beautifulsoup4
+    requests
 
-  buildInputs = old.buildInputs
-    ++ (with python37Packages; [
-      coverage
-      isort
-      mypy
-      pycodestyle
-      pyflakes
-      pylint
-      python-language-server
-    ]);
+    pytest
+    pytestrunner
+
+    coverage
+    isort
+    mypy
+    pycodestyle
+    pyflakes
+    pylint
+    typing-extensions
+  ];
 
   PYTHONDONTWRITEBYTECODE = 1;
-})
+}
