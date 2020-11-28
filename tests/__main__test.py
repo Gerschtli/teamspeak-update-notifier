@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 @patch("notifier.main.main")
 def test_main(mock_main: Mock) -> None:
-    from notifier import __main__
+    from notifier import __main__  # pylint: disable=import-outside-toplevel
 
     assert __main__  # silence pyflakes
 
