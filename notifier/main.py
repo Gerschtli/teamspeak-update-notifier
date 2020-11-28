@@ -14,7 +14,7 @@ def _sigterm_handler(_signo: signal.Signals, _stack_frame: types.FrameType) -> N
 
 
 def _handle_exception(exit_code: int) -> None:
-    LOGGER.exception("exception occured in main, stopping application")
+    LOGGER.exception("exception occurred in main, stopping application")
     sys.exit(exit_code)
 
 

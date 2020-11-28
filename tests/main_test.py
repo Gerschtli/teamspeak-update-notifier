@@ -62,7 +62,7 @@ def test_main_when_keyboard_interrupt(  # type: ignore
     mock_exit.assert_called_once_with(errors.SigTermError.exit_code)
 
     assert caplog.record_tuples == [
-        ("notifier.main", logging.ERROR, "exception occured in main, stopping application"),
+        ("notifier.main", logging.ERROR, "exception occurred in main, stopping application"),
     ]
 
 
@@ -96,7 +96,7 @@ def test_main_when_error(  # type: ignore
     mock_exit.assert_called_once_with(errors.MessageError.exit_code)
 
     assert caplog.record_tuples == [
-        ("notifier.main", logging.ERROR, "exception occured in main, stopping application"),
+        ("notifier.main", logging.ERROR, "exception occurred in main, stopping application"),
     ]
 
 
