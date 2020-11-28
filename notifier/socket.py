@@ -30,21 +30,26 @@ class Socket:
             LOGGER.exception("socket connect failed")
             raise errors.SocketConnectionError("socket connect failed")
 
-    def read(self, ignore: bool = False) -> Optional[Message]:
+    def read(self, ignore: bool = False, skip_empty: bool = False) -> Optional[Message]:
         if self._received_buffer:
-            return self.read_from_buffer(ignore)
+            return self.read_from_buffer(ignore, skip_empty)
 
         message_raw = self._socket.recv(BUFFER_SIZE)
         message_decoded = message_raw.decode()
         message = message_decoded.rstrip(MESSAGE_END)
         messages = message.split(MESSAGE_END)
-        messages_filtered = filter(lambda m: m == "", messages)
 
-        self._received_buffer.extend(messages_filtered)
+        if skip_empty:
+            messages = list(filter(lambda m: m != "", messages))
 
-        return self.read_from_buffer(ignore)
+        self._received_buffer.extend(messages)
 
-    def read_from_buffer(self, ignore: bool = False) -> Optional[Message]:
+        return self.read_from_buffer(ignore, skip_empty)
+
+    def read_from_buffer(self, ignore: bool = False, skip_empty: bool = False) -> Optional[Message]:
+        if skip_empty and len(self._received_buffer) == 0:
+            return None
+
         message = self._received_buffer.pop(0)
         if ignore:
             LOGGER.debug("ignoring message: %s", message)
