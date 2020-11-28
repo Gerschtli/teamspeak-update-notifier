@@ -6,7 +6,7 @@ import requests
 from . import commands
 from .socket import Socket
 
-DOWNLOAD_LINK: str = ("https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/")
+DOWNLOAD_LINK: str = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
 LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
