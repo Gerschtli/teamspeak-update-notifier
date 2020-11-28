@@ -38,8 +38,9 @@ class Socket:
         message_decoded = message_raw.decode()
         message = message_decoded.rstrip(MESSAGE_END)
         messages = message.split(MESSAGE_END)
+        messages_filtered = filter(lambda m: m == "", messages)
 
-        self._received_buffer.extend(messages)
+        self._received_buffer.extend(messages_filtered)
 
         return self.read_from_buffer(ignore)
 
