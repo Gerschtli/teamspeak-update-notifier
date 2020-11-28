@@ -2,7 +2,7 @@ import logging
 import socket
 from typing import List, Optional
 
-from . import errors
+from . import commands, errors
 from .message import Message
 
 BUFFER_SIZE: int = 2048
@@ -25,6 +25,10 @@ class Socket:
     def connect(self) -> None:
         try:
             self._socket.connect((self._host, self._port))
+
+            # timeout is 4 min because after 5 min of inactivity the connection gets closed
+            self._socket.settimeout(4 * 60)
+
             LOGGER.info("socket connected")
         except socket.error:
             LOGGER.exception("socket connect failed")
@@ -34,7 +38,7 @@ class Socket:
         if self._received_buffer:
             return self.read_from_buffer(ignore)
 
-        message_raw = self._socket.recv(BUFFER_SIZE)
+        message_raw = self.recv()
         message_decoded = message_raw.decode()
         message = message_decoded.rstrip(MESSAGE_END)
         messages = message.split(MESSAGE_END)
@@ -51,6 +55,13 @@ class Socket:
 
         LOGGER.debug("read message: %s", message)
         return Message.build_from_string(message)
+
+    def recv(self):
+        while True:
+            try:
+                return self._socket.recv(BUFFER_SIZE)
+            except socket.timeout:
+                self.write(commands.KeepAlive())
 
     def write(self, message: Message) -> None:
         LOGGER.debug("write message: %s", message)
