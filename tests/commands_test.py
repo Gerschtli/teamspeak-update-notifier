@@ -22,6 +22,15 @@ def test_notify_register() -> None:
     assert str(message) == "servernotifyregister event=server"
 
 
+def test_keep_alive() -> None:
+    message = commands.KeepAlive()
+
+    assert isinstance(message, commands.Command)
+    assert message.has_response
+    assert message.command == "version"
+    assert str(message) == "version"
+
+
 def test_quit() -> None:
     message = commands.Quit()
 

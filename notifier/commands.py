@@ -24,6 +24,15 @@ class Login(Command):
         )
 
 
+class KeepAlive(Command):
+    """
+    Just any command which is executed regularly to keep connection alive.
+    """
+
+    def __init__(self) -> None:
+        super().__init__("version", has_response=True)
+
+
 class NotifyRegister(Command):
     def __init__(self) -> None:
         super().__init__(
