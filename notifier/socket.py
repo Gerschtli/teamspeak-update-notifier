@@ -6,7 +6,7 @@ import socket
 import threading
 from abc import abstractmethod
 from contextlib import contextmanager
-from typing import Generator
+from typing import Any, Iterator
 
 from . import errors
 from .message import Message
@@ -18,7 +18,7 @@ TIMEOUT_SECONDS: int = 10
 
 
 @contextmanager
-def init_socket(host: str, port: int) -> Generator[socket.socket]:
+def init_socket(host: str, port: int) -> Iterator[socket.socket]:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         try:
             sock.connect((host, port))
@@ -70,9 +70,6 @@ class SocketReader(SocketThread):
 
 
 class SocketWriter(SocketThread):
-    def __init__(self, sock: socket.socket, queue_: queue.Queue, *args, **kwargs):
-        super().__init__(sock, queue_, *args, **kwargs)
-
     def execute(self) -> None:
         try:
             message = self._queue.get(timeout=TIMEOUT_SECONDS)
