@@ -38,11 +38,3 @@ def test_sig_term_error() -> None:
     assert isinstance(error, Exception)
     assert isinstance(error, errors.Error)
     assert error.exit_code == 4
-
-
-def test_empty_message_error() -> None:
-    error = errors.EmptyMessageError()
-
-    assert isinstance(error, Exception)
-    assert isinstance(error, errors.Error)
-    assert error.exit_code == 5
