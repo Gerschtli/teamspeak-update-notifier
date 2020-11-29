@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import logging
 import socket
-from typing import List, Optional
+from types import TracebackType
+from typing import List, Optional, Type
 
 from . import commands, errors
 from .message import Message
@@ -17,22 +20,6 @@ class Socket:
         self._received_buffer: List[str] = []
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.last_command: Optional[Message] = None
-
-    def close(self) -> None:
-        self._socket.close()
-        LOGGER.info("socket closed")
-
-    def connect(self) -> None:
-        try:
-            self._socket.connect((self._host, self._port))
-
-            # timeout is 4 min because after 5 min of inactivity the connection gets closed
-            self._socket.settimeout(4 * 60)
-
-            LOGGER.info("socket connected")
-        except socket.error:
-            LOGGER.exception("socket connect failed")
-            raise errors.SocketConnectionError("socket connect failed")
 
     def read(self, ignore: bool = False) -> Optional[Message]:
         if self._received_buffer:
@@ -68,3 +55,25 @@ class Socket:
         self.last_command = message
         message_string = str(message) + MESSAGE_END
         self._socket.send(str.encode(message_string))
+
+    def __enter__(self) -> Socket:
+        try:
+            self._socket.connect((self._host, self._port))
+
+            # timeout is 4 min because after 5 min of inactivity the connection gets closed
+            self._socket.settimeout(4 * 60)
+
+            LOGGER.info("socket connected")
+        except socket.error:
+            LOGGER.exception("socket connect failed")
+            raise errors.SocketConnectionError("socket connect failed")
+
+        return self
+
+    def __exit__(self, exception_type: Optional[Type[BaseException]],  # type: ignore
+                 exception_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]) -> bool:
+        self._socket.close()
+        LOGGER.info("socket closed")
+
+        return False

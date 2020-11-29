@@ -44,7 +44,6 @@ class Client:
             self._socket.read(ignore=True)
 
     def __enter__(self) -> Client:
-        self._socket.connect()
         self._skip_messages(2)
 
         return self
@@ -55,7 +54,5 @@ class Client:
         connection_errors = [errors.SocketConnectionError, errors.ServerDisconnectError]
         if exception_type not in connection_errors:
             self.execute(commands.Quit())
-
-        self._socket.close()
 
         return False
