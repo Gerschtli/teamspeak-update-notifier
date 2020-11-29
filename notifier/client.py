@@ -47,7 +47,9 @@ class Client:
 
             for handler in handlers_list:
                 if handler.match(message):
-                    handler.execute(self, message)
+                    command = handler.execute(message)
+                    if command is not None:
+                        self.execute(command)
                     break
 
     def __enter__(self) -> Client:

@@ -1,8 +1,8 @@
 import logging
 from abc import abstractmethod
+from typing import Optional
 
 from . import commands, errors, version_manager
-from .client import Client
 from .message import Message
 
 LOGGER: logging.Logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ class Handler:
         raise NotImplementedError()
 
     @abstractmethod
-    def execute(self, client: Client, message: Message) -> None:
+    def execute(self, message: Message) -> Optional[commands.Command]:
         raise NotImplementedError()
 
 
@@ -28,7 +28,7 @@ class ClientEnter(Handler):
     def match(message: Message) -> bool:
         return message.command == "notifycliententerview"
 
-    def execute(self, client: Client, message: Message) -> None:
+    def execute(self, message: Message) -> Optional[commands.Command]:
         client_id = message.param("clid")
         servergroups = message.param("client_servergroups")
         nickname = message.param("client_nickname")
@@ -40,11 +40,10 @@ class ClientEnter(Handler):
                 or client_id is None
                 or nickname is None
                 or not version_manager.need_update(self._current_version)):
-            return
-
-        client.execute(commands.SendMessage(client_id, version_manager.build_message()))
+            return None
 
         LOGGER.info("send message to client %s", nickname)
+        return commands.SendMessage(client_id, version_manager.build_message())
 
 
 class ClientLeft(Handler):
@@ -55,7 +54,9 @@ class ClientLeft(Handler):
     def match(message: Message) -> bool:
         return message.command == "notifyclientleftview"
 
-    def execute(self, client: Client, message: Message) -> None:
+    def execute(  # pylint: disable=useless-return
+            self, message: Message
+    ) -> Optional[commands.Command]:
         # check for server down
         if message.param("reasonid") == "11":
             raise errors.ServerDisconnectError("server shutdown received")
@@ -63,3 +64,5 @@ class ClientLeft(Handler):
         # check for client disconnect
         if message.param("clid") == self._client_id:
             raise errors.ServerDisconnectError("client disconnected")
+
+        return None
