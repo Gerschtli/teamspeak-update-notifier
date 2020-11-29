@@ -37,7 +37,7 @@ def test_main(
 @patch("signal.signal")
 @patch("notifier.app.build_config")
 @patch("logging.basicConfig")
-def test_main_when_keyboard_interrupt(  # type: ignore
+def test_main_when_keyboard_interrupt(
         mock_basic_config: Mock,
         mock_build_config: Mock,
         mock_signal: Mock,
@@ -71,7 +71,7 @@ def test_main_when_keyboard_interrupt(  # type: ignore
 @patch("signal.signal")
 @patch("notifier.app.build_config")
 @patch("logging.basicConfig")
-def test_main_when_error(  # type: ignore
+def test_main_when_error(
         mock_basic_config: Mock,
         mock_build_config: Mock,
         mock_signal: Mock,
@@ -105,7 +105,7 @@ def test_main_when_error(  # type: ignore
 @patch("signal.signal")
 @patch("notifier.app.build_config")
 @patch("logging.basicConfig")
-def test_main_when_other_exception(  # type: ignore
+def test_main_when_other_exception(
         mock_basic_config: Mock,
         mock_build_config: Mock,
         mock_signal: Mock,
