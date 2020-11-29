@@ -1,16 +1,30 @@
-from typing import Dict, Optional
+from typing import Dict, NamedTuple, Optional, TypeVar
 
+from . import errors
 from .message import Message
 
+T = TypeVar('T')
 
-class Command(Message):
+
+class Command:
     def __init__(self,
                  command: str,
-                 value_params: Optional[Dict[str, str]] = None,
-                 has_response: bool = False) -> None:
+                 value_params: Optional[Dict[str, str]] = None) -> None:
+        self.message = Message(command, value_params)
+
+    def check_error(self, message: Optional[Message]) -> None:
+        if message is not None and message.command == "error" and message.param("msg") == "ok":
+            return
+
+        raise errors.MessageError(f"error last command: {self.message}")
+
+
+class QueryCommand(Command):
+    def __init__(self, command: str, value_params: Optional[Dict[str, str]] = None) -> None:
         super().__init__(command, value_params)
 
-        self.has_response = has_response
+    def handle(self, message: Optional[Message]) -> T:
+        return None
 
 
 class Login(Command):
@@ -24,13 +38,13 @@ class Login(Command):
         )
 
 
-class KeepAlive(Command):
+class KeepAlive(QueryCommand):
     """
     Just any command which is executed regularly to keep connection alive.
     """
 
     def __init__(self) -> None:
-        super().__init__("version", has_response=True)
+        super().__init__("version")
 
 
 class NotifyRegister(Command):
@@ -46,7 +60,7 @@ class Quit(Command):
         super().__init__("quit")
 
 
-class SendMessage(Command):
+class SendMessage(QueryCommand):
     def __init__(self, client_id: str, message: str) -> None:
         super().__init__(
             "sendtextmessage",
@@ -55,7 +69,6 @@ class SendMessage(Command):
                 "target": client_id,
                 "msg": message,
             },
-            has_response=True,
         )
 
 
@@ -67,6 +80,18 @@ class Use(Command):
         )
 
 
-class Whoami(Command):
+class WhoamiResponse(NamedTuple):
+    client_id: str
+
+
+class Whoami(QueryCommand):
     def __init__(self) -> None:
-        super().__init__("whoami", has_response=True)
+        super().__init__("whoami")
+
+    def handle(self, message: Optional[Message]) -> T:
+        client_id = message.param("client_id")
+
+        if client_id is None:
+            raise errors.MessageError("whoami failed")
+
+        return WhoamiResponse(client_id)
