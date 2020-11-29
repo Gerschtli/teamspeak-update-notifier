@@ -1,4 +1,3 @@
-from notifier import errors
 from notifier.message import Message
 
 
@@ -20,14 +19,9 @@ def test_build_from_string_with_special_chars() -> None:
 
 
 def test_build_from_string_with_empty_message() -> None:
-    exception = None
+    message = Message.build_from_string("")
 
-    try:
-        Message.build_from_string("")
-    except errors.EmptyMessageError as ex:
-        exception = ex
-
-    assert str(exception) == "empty message received"
+    assert message is None
 
 
 def test_init() -> None:
