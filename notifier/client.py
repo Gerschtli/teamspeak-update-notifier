@@ -3,14 +3,16 @@ from __future__ import annotations
 import queue
 import time
 from types import TracebackType
-from typing import List, Optional, Type
+from typing import TYPE_CHECKING, List, Optional, Type
 
 from . import commands, errors, handlers
 
+if TYPE_CHECKING:
+    from .message import Message
 
 
 class Client:
-    def __init__(self, queue_read: queue.Queue, queue_write: queue.Queue) -> None:
+    def __init__(self, queue_read: "queue.Queue[Message]", queue_write: "queue.Queue[Message]") -> None:
         self._queue_read = queue_read
         self._queue_write = queue_write
         self._last_message_sent = 0

@@ -30,7 +30,7 @@ def init_socket(host: str, port: int) -> Generator[socket.socket]:
 
 
 class SocketThread(threading.Thread):
-    def __init__(self, sock: socket.socket, queue_: queue.Queue, *args, **kwargs):
+    def __init__(self, sock: socket.socket, queue_: "queue.Queue[Message]", *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self._sock = sock
         self._queue = queue_
@@ -49,7 +49,7 @@ class SocketThread(threading.Thread):
 
 
 class SocketReader(SocketThread):
-    def __init__(self, sock: socket.socket, queue_: queue.Queue, *args, **kwargs):
+    def __init__(self, sock: socket.socket, queue_: "queue.Queue[Message]", *args: Any, **kwargs: Any):
         super().__init__(sock, queue_, *args, **kwargs)
         self._sock.settimeout(TIMEOUT_SECONDS)  # return recv after timeout
 
@@ -65,7 +65,8 @@ class SocketReader(SocketThread):
             LOGGER.debug("read message: %s", message_raw)
             message = Message.build_from_string(message_raw)
 
-            self._queue.put(message)
+            if message is not None:
+                self._queue.put(message)
 
 
 class SocketWriter(SocketThread):

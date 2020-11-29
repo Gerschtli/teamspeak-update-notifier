@@ -2,10 +2,14 @@ import argparse
 import configparser
 import logging
 import queue
+from typing import TYPE_CHECKING
 
 from . import commands, errors, handlers
 from .client import Client
 from .socket import SocketReader, SocketWriter, init_socket
+
+if TYPE_CHECKING:
+    from .message import Message
 
 LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -26,8 +30,8 @@ def start(config: configparser.ConfigParser) -> None:
     config_notifier = dict(config.items("notifier"))
 
     with init_socket(config_ts3["host"], int(config_ts3["port"])) as sock:
-        queue_read = queue.Queue()
-        queue_write = queue.Queue()
+        queue_read: "queue.Queue[Message]" = queue.Queue()
+        queue_write: "queue.Queue[Message]" = queue.Queue()
 
         reader = SocketReader(sock, queue_read)
         writer = SocketWriter(sock, queue_write)
