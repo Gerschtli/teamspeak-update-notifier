@@ -1,9 +1,13 @@
-from typing import Dict, NamedTuple, Optional, TypeVar
+from abc import abstractmethod
+from typing import Dict, Optional
 
 from . import errors
 from .message import Message
 
-T = TypeVar('T')
+
+class Response:
+    def __init__(self, result: str):
+        self.result = result
 
 
 class Command:
@@ -12,19 +16,17 @@ class Command:
                  value_params: Optional[Dict[str, str]] = None) -> None:
         self.message = Message(command, value_params)
 
-    def check_error(self, message: Optional[Message]) -> None:
-        if message is not None and message.command == "error" and message.param("msg") == "ok":
+    def check_error(self, message: Message) -> None:
+        if message.command == "error" and message.param("msg") == "ok":
             return
 
         raise errors.MessageError(f"error last command: {self.message}")
 
 
 class QueryCommand(Command):
-    def __init__(self, command: str, value_params: Optional[Dict[str, str]] = None) -> None:
-        super().__init__(command, value_params)
-
-    def handle(self, message: Optional[Message]) -> T:
-        return None
+    @abstractmethod
+    def handle(self, message: Message) -> Optional[Response]:
+        raise NotImplementedError()
 
 
 class Login(Command):
@@ -45,6 +47,9 @@ class KeepAlive(QueryCommand):
 
     def __init__(self) -> None:
         super().__init__("version")
+
+    def handle(self, message: Message) -> Optional[Response]:
+        return None
 
 
 class NotifyRegister(Command):
@@ -71,6 +76,9 @@ class SendMessage(QueryCommand):
             },
         )
 
+    def handle(self, message: Message) -> Optional[Response]:
+        return None
+
 
 class Use(Command):
     def __init__(self, server_id: str) -> None:
@@ -80,18 +88,14 @@ class Use(Command):
         )
 
 
-class WhoamiResponse(NamedTuple):
-    client_id: str
-
-
 class Whoami(QueryCommand):
     def __init__(self) -> None:
         super().__init__("whoami")
 
-    def handle(self, message: Optional[Message]) -> T:
+    def handle(self, message: Message) -> Optional[Response]:
         client_id = message.param("client_id")
 
         if client_id is None:
             raise errors.MessageError("whoami failed")
 
-        return WhoamiResponse(client_id)
+        return Response(client_id)

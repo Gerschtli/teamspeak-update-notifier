@@ -3,7 +3,7 @@ import configparser
 import logging
 import queue
 
-from . import commands, handlers
+from . import commands, errors, handlers
 from .client import Client
 from .socket import SocketReader, SocketWriter, init_socket
 
@@ -41,12 +41,15 @@ def start(config: configparser.ConfigParser) -> None:
                 client.execute(commands.Use(config_ts3["server_id"]))
 
                 whoami = client.execute(commands.Whoami())
+                if whoami is None:
+                    raise errors.MessageError("whoami did not return response")
+
                 client.execute(commands.NotifyRegister())
 
                 client.listen([
                     handlers.ClientEnter(config_notifier["server_group_id"],
                                          config_notifier["current_version"]),
-                    handlers.ClientLeft(whoami.client_id)
+                    handlers.ClientLeft(whoami.result)
                 ])
         finally:
             reader.kill()

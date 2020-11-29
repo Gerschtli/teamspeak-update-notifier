@@ -3,11 +3,10 @@ from __future__ import annotations
 import queue
 import time
 from types import TracebackType
-from typing import List, Optional, Type, TypeVar
+from typing import List, Optional, Type
 
 from . import commands, errors, handlers
 
-T = TypeVar('T')
 
 
 class Client:
@@ -16,7 +15,7 @@ class Client:
         self._queue_write = queue_write
         self._last_message_sent = 0
 
-    def execute(self, command: commands.Command) -> Optional[T]:
+    def execute(self, command: commands.Command) -> Optional[commands.Response]:
         self._queue_write.put(command.message)
         self._last_message_sent = time.time()
 
