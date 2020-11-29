@@ -19,7 +19,7 @@ class Client:
 
     def execute(self, command: commands.Command) -> Optional[commands.Response]:
         self._queue_write.put(command.message)
-        self._last_message_sent = time.time()
+        self._last_message_sent = int(time.time())
 
         result = None
         if isinstance(command, commands.QueryCommand):
