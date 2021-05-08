@@ -1,7 +1,7 @@
 with import <nixpkgs> { };
 
 mkShell {
-  buildInputs = with python37Packages; [
+  buildInputs = with python39Packages; [
     beautifulsoup4
     requests
 

@@ -1,9 +1,9 @@
 codecov
 coverage
-isort==4.3.21
+isort
 mypy
 pycodestyle
 pyflakes
-pylint==2.5.3
+pylint
 pytest
 typing-extensions

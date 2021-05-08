@@ -24,7 +24,7 @@ def init_socket(host: str, port: int) -> Iterator[socket.socket]:
             sock.connect((host, port))
             LOGGER.info("socket connected")
         except socket.error:
-            raise errors.SocketConnectionError("socket connect failed")
+            raise errors.SocketConnectionError("socket connect failed") from socket.error
 
         yield sock
 

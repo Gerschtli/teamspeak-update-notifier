@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.9
 
       - name: Setup pip cache
         uses: actions/cache@v2
@@ -64,7 +64,7 @@ jobs:
           nix_path: nixpkgs=channel:${{ matrix.nix-channel }}
 
       - name: Show current python version
-        run: nix eval nixpkgs.python37.version
+        run: nix eval nixpkgs.python39.version
 
       - name: Build package
         run: nix-build
