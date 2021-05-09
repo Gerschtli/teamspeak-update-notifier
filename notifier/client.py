@@ -17,14 +17,23 @@ class Client:
         self._queue_write = queue_write
         self._last_message_sent = 0
 
-    def execute(self, command: commands.Command) -> Optional[commands.Response]:
+    def execute(self, command: commands.Command) -> None:
+        if isinstance(command, commands.QueryCommand):
+            raise errors.InvalidArgumentError("QueryCommands should be run with query!")
+
         self._queue_write.put(command.message)
         self._last_message_sent = int(time.time())
 
-        result = None
-        if isinstance(command, commands.QueryCommand):
-            result = command.handle(self._queue_read.get())
+        if isinstance(command, commands.ConsumerCommand):
+            self._queue_read.get()
 
+        command.check_error(self._queue_read.get())
+
+    def query(self, command: commands.QueryCommand) -> commands.Response:
+        self._queue_write.put(command.message)
+        self._last_message_sent = int(time.time())
+
+        result = command.handle(self._queue_read.get())
         command.check_error(self._queue_read.get())
 
         return result

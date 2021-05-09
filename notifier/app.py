@@ -4,7 +4,7 @@ import logging
 import queue
 from typing import TYPE_CHECKING
 
-from . import commands, errors, handlers
+from . import commands, handlers
 from .client import Client
 from .socket import SocketReader, SocketWriter, init_socket
 
@@ -44,15 +44,14 @@ def start(config: configparser.ConfigParser) -> None:
                 client.execute(commands.Login(config_ts3["username"], config_ts3["password"]))
                 client.execute(commands.Use(config_ts3["server_id"]))
 
-                whoami = client.execute(commands.Whoami())
-                if whoami is None:
-                    raise errors.MessageError("whoami did not return response")
+                whoami = client.query(commands.Whoami())
+                version = client.query(commands.Version())
 
                 client.execute(commands.NotifyRegister())
 
                 client.listen([
                     handlers.ClientEnter(config_notifier["server_group_id"],
-                                         config_notifier["current_version"]),
+                                         version.result),
                     handlers.ClientLeft(whoami.result)
                 ])
         finally:

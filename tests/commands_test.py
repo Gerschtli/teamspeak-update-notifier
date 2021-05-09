@@ -23,7 +23,7 @@ def test_notify_register() -> None:
 def test_keep_alive() -> None:
     command = commands.KeepAlive()
 
-    assert isinstance(command, commands.QueryCommand)
+    assert isinstance(command, commands.ConsumerCommand)
     assert command.message.command == "version"
     assert str(command.message) == "version"
 
@@ -39,7 +39,7 @@ def test_quit() -> None:
 def test_send_command() -> None:
     command = commands.SendMessage("123", "text")
 
-    assert isinstance(command, commands.QueryCommand)
+    assert isinstance(command, commands.ConsumerCommand)
     assert command.message.command == "sendtextmessage"
     assert command.message.param("targetmode") == "1"
     assert command.message.param("target") == "123"
@@ -54,6 +54,14 @@ def test_use() -> None:
     assert command.message.command == "use"
     assert command.message.param("sid") == "654"
     assert str(command.message) == "use sid=654"
+
+
+def test_version() -> None:
+    command = commands.Version()
+
+    assert isinstance(command, commands.QueryCommand)
+    assert command.message.command == "version"
+    assert str(command.message) == "version"
 
 
 def test_whoami() -> None:

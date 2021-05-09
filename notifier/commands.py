@@ -23,9 +23,13 @@ class Command:
         raise errors.MessageError(f"error last command: {self.message}")
 
 
+class ConsumerCommand(Command):
+    pass
+
+
 class QueryCommand(Command):
     @abstractmethod
-    def handle(self, message: Message) -> Optional[Response]:
+    def handle(self, message: Message) -> Response:
         raise NotImplementedError()
 
 
@@ -40,16 +44,13 @@ class Login(Command):
         )
 
 
-class KeepAlive(QueryCommand):
+class KeepAlive(ConsumerCommand):
     """
     Just any command which is executed regularly to keep connection alive.
     """
 
     def __init__(self) -> None:
         super().__init__("version")
-
-    def handle(self, message: Message) -> Optional[Response]:
-        return None
 
 
 class NotifyRegister(Command):
@@ -65,7 +66,7 @@ class Quit(Command):
         super().__init__("quit")
 
 
-class SendMessage(QueryCommand):
+class SendMessage(ConsumerCommand):
     def __init__(self, client_id: str, message: str) -> None:
         super().__init__(
             "sendtextmessage",
@@ -76,9 +77,6 @@ class SendMessage(QueryCommand):
             },
         )
 
-    def handle(self, message: Message) -> Optional[Response]:
-        return None
-
 
 class Use(Command):
     def __init__(self, server_id: str) -> None:
@@ -88,11 +86,24 @@ class Use(Command):
         )
 
 
+class Version(QueryCommand):
+    def __init__(self) -> None:
+        super().__init__("version")
+
+    def handle(self, message: Message) -> Response:
+        version = message.param("version")
+
+        if version is None:
+            raise errors.MessageError("version failed")
+
+        return Response(version)
+
+
 class Whoami(QueryCommand):
     def __init__(self) -> None:
         super().__init__("whoami")
 
-    def handle(self, message: Message) -> Optional[Response]:
+    def handle(self, message: Message) -> Response:
         client_id = message.param("client_id")
 
         if client_id is None:
