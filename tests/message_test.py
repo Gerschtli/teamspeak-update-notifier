@@ -20,6 +20,16 @@ def test_build_from_string_with_special_chars() -> None:
     assert str(message) == r"command payload=test\sx\\o\/x\p"
 
 
+def test_build_from_string_without_command() -> None:
+    message = Message.build_from_string("version=3.13.3 platform=Linux")
+
+    assert message is not None
+    assert message.command is None
+    assert message.param("version") == "3.13.3"
+    assert message.param("platform") == "Linux"
+    assert str(message) == "version=3.13.3 platform=Linux"
+
+
 def test_build_from_string_with_empty_message() -> None:
     message = Message.build_from_string("")
 

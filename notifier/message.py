@@ -14,7 +14,7 @@ class Message:
     ]
 
     def __init__(self,
-                 command: str,
+                 command: Optional[str],
                  value_params: Optional[Dict[str, str]] = None,
                  key_params: Optional[List[str]] = None) -> None:
         self.command = command
@@ -27,7 +27,9 @@ class Message:
             return None
 
         message_parts = message.split(Message._delimiter_param)
-        command = message_parts.pop(0)
+        command = None
+        if Message._delimiter_kv not in message_parts[0]:
+            command = message_parts.pop(0)
 
         value_params = {}
         key_params = []
@@ -65,6 +67,9 @@ class Message:
             for key, value in self._value_params.items()
         ]
 
-        params = [self.command] + self._key_params + encoded_params
+        params = []
+        if self.command is not None:
+            params = [self.command]
+        params += self._key_params + encoded_params
 
         return Message._delimiter_param.join(params)
