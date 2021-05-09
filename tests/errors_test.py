@@ -38,3 +38,11 @@ def test_sig_term_error() -> None:
     assert isinstance(error, Exception)
     assert isinstance(error, errors.Error)
     assert error.exit_code == 4
+
+
+def test_invalid_argument_error() -> None:
+    error = errors.InvalidArgumentError()
+
+    assert isinstance(error, Exception)
+    assert isinstance(error, errors.Error)
+    assert error.exit_code == 5

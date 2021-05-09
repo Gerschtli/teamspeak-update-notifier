@@ -16,3 +16,7 @@ class ServerDisconnectError(Error):
 
 class SigTermError(Error):
     exit_code = 4
+
+
+class InvalidArgumentError(Error):
+    exit_code = 5
