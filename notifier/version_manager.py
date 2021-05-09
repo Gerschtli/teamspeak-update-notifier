@@ -3,7 +3,7 @@ import logging
 import bs4  # type: ignore
 import requests
 
-DOWNLOAD_LINK: str = "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/"
+DOWNLOAD_LINK: str = "https://www.teamspeak.com/en/downloads/"
 LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
@@ -25,7 +25,7 @@ def _recent_version() -> str:
     data = requests.get(DOWNLOAD_LINK)
 
     soup = bs4.BeautifulSoup(data.text, "html.parser")
-    element = soup.select("[itemprop=softwareVersion]")
+    element = soup.select("#server .linux .version")
     version: str = element[0].text
 
-    return version
+    return version.strip()
