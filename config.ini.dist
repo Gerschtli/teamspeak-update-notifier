@@ -18,6 +18,3 @@ server_id = 1
 
 # client server group id to identifier user group which get the notification
 server_group_id = 6
-
-# current teamspeak version
-current_version = 1.2.3
