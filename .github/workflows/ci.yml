@@ -52,7 +52,7 @@ jobs:
       matrix:
         nix-channel:
           - nixpkgs-unstable
-          - nixos-20.09
+          - nixos-21.05
 
     steps:
       - name: Checkout repository
