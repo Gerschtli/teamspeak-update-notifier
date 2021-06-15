@@ -6,4 +6,5 @@ pycodestyle
 pyflakes
 pylint
 pytest
+types-requests
 typing-extensions
