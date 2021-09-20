@@ -8,7 +8,7 @@ LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 def build_message() -> str:
-    return "Please update your server to version {}!".format(_recent_version())
+    return f"Please update your server to version {_recent_version()}!"
 
 
 def need_update(current_version: str) -> bool:
