@@ -46,3 +46,11 @@ def test_invalid_argument_error() -> None:
     assert isinstance(error, Exception)
     assert isinstance(error, errors.Error)
     assert error.exit_code == 5
+
+
+def test_config_error() -> None:
+    error = errors.ConfigError()
+
+    assert isinstance(error, Exception)
+    assert isinstance(error, errors.Error)
+    assert error.exit_code == 6

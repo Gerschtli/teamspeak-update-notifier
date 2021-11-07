@@ -20,3 +20,7 @@ class SigTermError(Error):
 
 class InvalidArgumentError(Error):
     exit_code = 5
+
+
+class ConfigError(Error):
+    exit_code = 6

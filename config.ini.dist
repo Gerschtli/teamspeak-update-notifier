@@ -8,7 +8,9 @@ port = 10011
 
 # username and password for server query
 username = user
+# one of password or password_file
 password = s3cuR3-PW
+password_file = /path/to/password-file
 
 # server id (see serverlist command)
 server_id = 1

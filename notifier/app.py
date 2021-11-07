@@ -2,10 +2,11 @@ import argparse
 import configparser
 import logging
 import queue
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 
 from . import commands, handlers
 from .client import Client
+from .errors import ConfigError
 from .socket import SocketReader, SocketWriter, init_socket
 
 if TYPE_CHECKING:
@@ -25,9 +26,21 @@ def build_config() -> configparser.ConfigParser:
     return config
 
 
+def get_password(config_ts3: Dict[str, str]) -> str:
+    if not ("password" in config_ts3) ^ ("password_file" in config_ts3):
+        raise ConfigError("Either password or password_file must be set.")
+
+    if "password" in config_ts3 and config_ts3["password"] is not None:
+        return config_ts3["password"]
+
+    with open(config_ts3["password_file"], 'r', encoding="utf-8") as file:
+        return file.read().rstrip()
+
+
 def start(config: configparser.ConfigParser) -> None:
     config_ts3 = dict(config.items("ts3"))
     config_notifier = dict(config.items("notifier"))
+    password = get_password(config_ts3)
 
     with init_socket(config_ts3["host"], int(config_ts3["port"])) as sock:
         queue_read: "queue.Queue[Message]" = queue.Queue()
@@ -41,7 +54,7 @@ def start(config: configparser.ConfigParser) -> None:
 
         try:
             with Client(queue_read, queue_write) as client:
-                client.execute(commands.Login(config_ts3["username"], config_ts3["password"]))
+                client.execute(commands.Login(config_ts3["username"], password))
                 client.execute(commands.Use(config_ts3["server_id"]))
 
                 whoami = client.query(commands.Whoami())
