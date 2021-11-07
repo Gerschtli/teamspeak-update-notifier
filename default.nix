@@ -2,7 +2,7 @@
 
 pkgs.python39.pkgs.buildPythonPackage rec {
   pname = "teamspeak-update-notifier";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = builtins.filterSource
     (path: type: type != "directory" || baseNameOf path != "teamspeak_update_notifier.egg-info")
