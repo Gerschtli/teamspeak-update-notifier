@@ -1,7 +1,7 @@
-with import <nixpkgs> { };
+{ pkgs ? import <nixpkgs> { } }:
 
-mkShell {
-  buildInputs = with python39Packages; [
+pkgs.mkShell {
+  buildInputs = with pkgs.python39Packages; [
     beautifulsoup4
     requests
 
@@ -13,8 +13,10 @@ mkShell {
     mypy
     pycodestyle
     pyflakes
-    pylint
+    #pylint is currently not compiling
     typing-extensions
+
+    pkgs.nixpkgs-fmt
   ];
 
   PYTHONDONTWRITEBYTECODE = 1;

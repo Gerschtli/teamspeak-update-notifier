@@ -30,4 +30,4 @@ Or install the application [setuptools](https://pypi.org/project/setuptools/) (s
 ### Nix support
 
 For users of the [nix package manager](https://nixos.org/nix/) the `default.nix` can be used to build the package with
-`nix-build`. The development environment can be configured with `nix-shell`.
+`nix-build`. The development environment can be configured with `nix-shell`. There is also support for nix flakes.
