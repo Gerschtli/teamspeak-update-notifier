@@ -57,6 +57,9 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
 
+      - name: Check flake
+        run: nix flake check --log-format bar-with-logs
+
       - name: Show current python version
         run: nix develop --log-format bar-with-logs --command python --version
 

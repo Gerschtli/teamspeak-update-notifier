@@ -24,7 +24,7 @@
       defaultApp.${system} = app;
       apps.${system}.${name} = app;
 
-      overlay.${system} = final: prev: {
+      overlay = final: prev: {
         ${name} = import ./. { pkgs = prev; };
       };
 
