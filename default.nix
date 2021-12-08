@@ -15,6 +15,6 @@ pkgs.python39.pkgs.buildPythonPackage rec {
 
   checkInputs = with pkgs.python39Packages; [
     pytest
-    pytestrunner
+    pytest-runner
   ];
 }
