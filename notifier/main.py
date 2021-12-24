@@ -2,6 +2,7 @@ import logging
 import signal
 import sys
 import types
+from typing import Optional
 
 from . import app, errors
 
@@ -9,7 +10,7 @@ LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 # pylint: disable=no-member
-def _sigterm_handler(_signo: signal.Signals, _stack_frame: types.FrameType) -> None:
+def _sigterm_handler(_signo: int, _stack_frame: Optional[types.FrameType]) -> None:
     raise errors.SigTermError("process killed via SIGTERM")
 
 
