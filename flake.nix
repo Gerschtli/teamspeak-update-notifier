@@ -1,7 +1,7 @@
 {
   description = "Sends update notifications to server admins for teamspeak server";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
 
   outputs = { self, nixpkgs }:
     let
@@ -18,16 +18,20 @@
       };
     in
     {
-      defaultPackage.${system} = package;
-      packages.${system}.${name} = package;
+      packages.${system} = {
+        default = package;
+        ${name} = package;
+      };
 
-      defaultApp.${system} = app;
-      apps.${system}.${name} = app;
+      apps.${system} = {
+        default = app;
+        ${name} = app;
+      };
 
-      overlay = final: prev: {
+      overlays.default = final: prev: {
         ${name} = import ./. { pkgs = prev; };
       };
 
-      devShell.${system} = import ./shell.nix { inherit pkgs; };
+      devShells.${system}.default = import ./shell.nix { inherit pkgs; };
     };
 }
