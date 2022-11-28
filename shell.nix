@@ -13,7 +13,7 @@ pkgs.mkShell {
     mypy
     pycodestyle
     pyflakes
-    #pylint is currently not compiling
+    pylint
     typing-extensions
 
     pkgs.nixpkgs-fmt
