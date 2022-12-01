@@ -1,7 +1,7 @@
 {
   description = "Sends update notifications to server admins for teamspeak server";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
 
   outputs = { self, nixpkgs }:
     let
