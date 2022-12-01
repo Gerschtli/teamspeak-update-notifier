@@ -22,7 +22,7 @@ def need_update(current_version: str) -> bool:
 
 
 def _recent_version() -> str:
-    data = requests.get(DOWNLOAD_LINK)
+    data = requests.get(DOWNLOAD_LINK, timeout=5)  # timeout in seconds
 
     soup = bs4.BeautifulSoup(data.text, "html.parser")
     element = soup.select("#server .linux .version")
