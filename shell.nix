@@ -15,6 +15,7 @@ pkgs.mkShell {
     pyflakes
     pylint
     typing-extensions
+    types-requests
 
     pkgs.nixpkgs-fmt
   ];
