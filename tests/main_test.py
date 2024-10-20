@@ -1,3 +1,5 @@
+# pylint: disable=too-many-positional-arguments
+
 import configparser
 import logging
 import signal
