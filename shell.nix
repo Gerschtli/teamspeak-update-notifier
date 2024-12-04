@@ -1,12 +1,11 @@
 { pkgs ? import <nixpkgs> { } }:
 
 pkgs.mkShell {
-  buildInputs = with pkgs.python311Packages; [
+  buildInputs = with pkgs.python3Packages; [
     beautifulsoup4
     requests
 
     pytest
-    pytestrunner
 
     coverage
     isort

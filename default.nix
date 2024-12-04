@@ -1,6 +1,6 @@
 { pkgs ? import <nixpkgs> { } }:
 
-pkgs.python311.pkgs.buildPythonPackage rec {
+pkgs.python3.pkgs.buildPythonPackage rec {
   pname = "teamspeak-update-notifier";
   version = "1.7.2";
 
@@ -8,13 +8,12 @@ pkgs.python311.pkgs.buildPythonPackage rec {
     (path: type: type != "directory" || baseNameOf path != "teamspeak_update_notifier.egg-info")
     ./.;
 
-  propagatedBuildInputs = with pkgs.python311Packages; [
+  propagatedBuildInputs = with pkgs.python3Packages; [
     beautifulsoup4
     requests
   ];
 
-  checkInputs = with pkgs.python311Packages; [
+  checkInputs = with pkgs.python3Packages; [
     pytest
-    pytest-runner
   ];
 }

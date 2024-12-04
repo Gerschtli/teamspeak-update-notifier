@@ -36,7 +36,7 @@ jobs:
         run: ./ci/lint.sh
 
       - name: Test
-        run: coverage run setup.py test
+        run: coverage run -m pytest
 
       - name: Upload coverage to Codecov
         env:
