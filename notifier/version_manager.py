@@ -1,6 +1,6 @@
 import logging
 
-import bs4  # type: ignore
+import bs4
 import requests
 
 DOWNLOAD_LINK: str = "https://www.teamspeak.com/en/downloads/"
